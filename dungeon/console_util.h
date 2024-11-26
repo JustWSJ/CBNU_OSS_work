@@ -1,6 +1,12 @@
 #ifndef CONSOLE_UTIL_H
 #define CONSOLE_UTIL_H
+#include <stdlib.h>
+#include <windows.h>
+#define pause system("pause > nul")
 
-void clearScreen();  // 화면을 지우는 함수 선언
+void SetColor(int color);
+void CursorView(char show);
+void gotoxy(int x, int y);
+void clearScreen();
 
-#endif
+#endif // CONSOLE_UTIL_H

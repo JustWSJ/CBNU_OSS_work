@@ -8,6 +8,7 @@
 #define KEY_RIGHT VK_RIGHT
 #define KEY_SPACE VK_SPACE
 #define KEY_ESCAPE VK_ESCAPE
+#define KEY_ENTER VK_RETURN
 
 // 키 입력 확인 함수 선언
 int isKeyPressed(int key);
