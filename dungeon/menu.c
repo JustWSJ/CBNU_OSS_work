@@ -163,7 +163,7 @@ void showStatusAllocation() {
                     Sleep(150);
                 }
 
-                if (isKeyPressed(KEY_SPACE)) {
+                if (isKeyPressed(KEY_SPACE)||isKeyPressed(KEY_ENTER)) {
                     if (choice == 0) {
                         //srand(time(NULL));
 
