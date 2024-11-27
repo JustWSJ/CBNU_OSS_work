@@ -60,7 +60,7 @@ void showStatusAllocation() {
     while (1) {
         if (updated) {
             gotoxy(0,1);
-            printf("             Remaining points: %d\n\n", points);
+            printf("             Remaining points: %d      \n\n", points);
 
             int baseY = 3;
 
@@ -113,16 +113,21 @@ void showStatusAllocation() {
             Sleep(150);
         }
 
-        if (isKeyPressed(KEY_LEFT) && points >= 0) {
-            switch (selectedStat) {
-                case 0: health--; points++; break;
-                case 1: strength--; points++; break;
-                case 2: agility--; points++; break;
-                case 3: intelligence--; points++; break;
-                case 4: sensory--; points++; break;
-                case 5: luck--; points++; break;
+        // if 조건에 각 스탯의 최소치를 1로 지정함. 이후에 0을 상수로 조정 가능
+        if (isKeyPressed(KEY_LEFT) && points >= 0 ) {
+            if (selectedStat == 0 && health > 0 + 1) {
+                health--; points++; updated = 1;
+            } else if (selectedStat == 1 && strength > 0 + 1) {
+                strength--; points++; updated = 1;
+            } else if (selectedStat == 2 && agility > 0 + 1) {
+                agility--; points++; updated = 1;
+            } else if (selectedStat == 3 && intelligence > 0 + 1) {
+                intelligence--; points++; updated = 1;
+            } else if (selectedStat == 4 && sensory > 0 + 1) {
+                sensory--; points++; updated = 1;
+            } else if (selectedStat == 5 && luck > 0 + 1) {
+                luck--; points++; updated = 1;
             }
-            updated = 1;
             Sleep(150);
         }
         if (isKeyPressed(KEY_RIGHT) && points > 0) {

@@ -27,5 +27,5 @@ void InitializeSystem(void){
     CursorView(0);                // 커서 숨기기
     system("COLOR 0F");           // 배경: 검정, 글자색: 흰색
     system("mode con: cols=52 lines=15");       // 콘솔 크기 설정
-    system("title Zombie Survival - Main Menu"); // 콘솔 창 제목 설정
+    system("title Dungeon Game"); // 콘솔 창 제목 설정
 }
