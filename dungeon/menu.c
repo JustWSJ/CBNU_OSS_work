@@ -58,26 +58,26 @@ void showStatusAllocation() {
     int baseY = 3;
     char stat_name[6][15] = {"Health", "Strength", "Agility", "Intelligence", "Sensory", "Luck"};
     clearScreen();
-    printf("             Character Status Allocation\n");
-    printf("             Remaining points: %d      \n\n", points);
+    printf(" Character Status Allocation\n");
+    printf(" Remaining points: %d      \n\n", points);
 
     int stat_idx[6] = {health, strength, agility, intelligence, sensory, luck}; 
     for (int i = 0; i < 6; i++) {
-        gotoxy(15, baseY + i);
+        gotoxy(3, baseY + i);
         printf("%s: %d   ", stat_name[i], stat_idx[i]);
     }
 
-    gotoxy(13, baseY + 7);                               // 마지막 스탯 아래로 이동
+    gotoxy(1, baseY + 7);                               // 마지막 스탯 아래로 이동
     printf("Press Space to finalize allocation.     "); // 기존 내용 덮어쓰기
 
     while (1) {
         if (updated) {
             int stat_idx[6] = {health, strength, agility, intelligence, sensory, luck};
-            gotoxy(13,1);
+            gotoxy(1,1);
             printf("Remaining points: %d      \n\n", points);
 
             for (int i = 0; i < 6; i++) {
-                gotoxy(13, baseY + i); // 각 스탯의 줄로 이동
+                gotoxy(1, baseY + i); // 각 스탯의 줄로 이동
                 if (i == selectedStat) {
                     SetColor(0x0E);
                     printf("> %s: %d   ", stat_name[i], stat_idx[i]);
@@ -138,9 +138,9 @@ void showStatusAllocation() {
             int choice = 0;
             while (1) {
                 clearScreen();
-                printf("Apply status allocation?\n");
-                printf("1. Yes\n");
-                printf("2. No\n");
+                printf("     Apply status allocation?\n");
+                printf("     1. Yes\n");
+                printf("     2. No\n");
 
                 switch (choice) {
                     case 0: printf("> Yes\n"); break;
@@ -161,16 +161,7 @@ void showStatusAllocation() {
 
                 if (isKeyPressed(KEY_SPACE)||isKeyPressed(KEY_ENTER)) {
                     if (choice == 0) {
-                        //srand(time(NULL));
-
-                        //char dungeon[MAX_DUNGEON_SIZE][MAX_DUNGEON_SIZE];  // 최대 던전 크기 100x100
-                        //int level = 1;  // 첫 번째 레벨부터 시작
-                        //generateDungeonForLevel(level, dungeon);
-
-                        //static int saveCounter = 1;
-                        //char filename[50];
-                        //snprintf(filename, sizeof(filename), "save/save_%03d.txt", saveCounter++);
-                        //saveDungeonAndStats(filename, health, strength, agility, intelligence, sensory, luck, dungeon[][]);
+                        
 
                         printf("Dungeon generated and saved.\n");
                         Sleep(1000);
