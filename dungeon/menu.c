@@ -55,47 +55,38 @@ void showStatusAllocation() {
     int points = 15;
     int selectedStat = 0;  // 현재 선택된 스테이터스(0: health, 1: strength, ..., 5: luck)
     int updated = 1;  // 화면 갱신 여부를 추적하는 변수
+    int baseY = 3;
+    char stat_name[6][15] = {"Health", "Strength", "Agility", "Intelligence", "Sensory", "Luck"};
     clearScreen();
     printf("             Character Status Allocation\n");
+    printf("             Remaining points: %d      \n\n", points);
+
+    int stat_idx[6] = {health, strength, agility, intelligence, sensory, luck}; 
+    for (int i = 0; i < 6; i++) {
+        gotoxy(15, baseY + i);
+        printf("%s: %d   ", stat_name[i], stat_idx[i]);
+    }
+
+    gotoxy(13, baseY + 7);                               // 마지막 스탯 아래로 이동
+    printf("Press Space to finalize allocation.     "); // 기존 내용 덮어쓰기
+
     while (1) {
         if (updated) {
+            int stat_idx[6] = {health, strength, agility, intelligence, sensory, luck};
             gotoxy(13,1);
             printf("Remaining points: %d      \n\n", points);
 
-            int baseY = 3;
-
             for (int i = 0; i < 6; i++) {
-                gotoxy(15, baseY + i); // 각 스탯의 줄로 이동
+                gotoxy(13, baseY + i); // 각 스탯의 줄로 이동
                 if (i == selectedStat) {
-                    printf("> ");
+                    SetColor(0x0E);
+                    printf("> %s: %d   ", stat_name[i], stat_idx[i]);
+                    SetColor(0x0F);
                 } else {
-                    printf("  ");
-                }
-
-                switch (i) {
-                    case 0:
-                        printf("Health: %d   ", health);
-                        break;
-                    case 1:
-                        printf("Strength: %d   ", strength);
-                        break;
-                    case 2:
-                        printf("Agility: %d   ", agility);
-                        break;
-                    case 3:
-                        printf("Intelligence: %d   ", intelligence);
-                        break;
-                    case 4:
-                        printf("Sensory: %d   ", sensory);
-                        break;
-                    case 5:
-                        printf("Luck: %d   ", luck);
-                        break;
+                    printf("  %s: %d   ", stat_name[i], stat_idx[i]);
                 }
             }
             // 고정된 하단 메시지
-            gotoxy(9, baseY + 7);                               // 마지막 스탯 아래로 이동
-            printf("Press Space to finalize allocation.     "); // 기존 내용 덮어쓰기
             updated = 0;
         }
 
