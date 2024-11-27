@@ -56,19 +56,13 @@ void showStatusAllocation() {
     int selectedStat = 0;  // 현재 선택된 스테이터스(0: health, 1: strength, ..., 5: luck)
     int updated = 1;  // 화면 갱신 여부를 추적하는 변수
     int baseY = 3;
-    char stat_name[6][15] = {"Health", "Strength", "Agility", "Intelligence", "Sensory", "Luck"};
+
     clearScreen();
     printf(" Character Status Allocation\n");
-    printf(" Remaining points: %d      \n\n", points);
+    gotoxy(1, baseY + 7);
+    printf("Press Space to finalize allocation.     ");
 
-    int stat_idx[6] = {health, strength, agility, intelligence, sensory, luck}; 
-    for (int i = 0; i < 6; i++) {
-        gotoxy(3, baseY + i);
-        printf("%s: %d   ", stat_name[i], stat_idx[i]);
-    }
-
-    gotoxy(1, baseY + 7);                               // 마지막 스탯 아래로 이동
-    printf("Press Space to finalize allocation.     "); // 기존 내용 덮어쓰기
+    char stat_name[6][15] = {"Health", "Strength", "Agility", "Intelligence", "Sensory", "Luck"};
 
     while (1) {
         if (updated) {
@@ -89,7 +83,6 @@ void showStatusAllocation() {
             // 고정된 하단 메시지
             updated = 0;
         }
-
 
         if (isKeyPressed(KEY_UP)) {
             selectedStat--;
@@ -135,55 +128,68 @@ void showStatusAllocation() {
         }
 
         if (points <= 0 && (isKeyPressed(KEY_SPACE)||isKeyPressed(KEY_ENTER))) {
+            Sleep(150);
             int choice = 0;
             clearScreen();
             printf(" Apply status allocation?\n");
-            printf(" > 1. Yes\n");
-            printf("   2. No\n");
+            updated = 1;
             while (1) {
-                if (choice == 0) {
-                    gotoxy(1, choice + 1);
-                    SetColor(0x0E);
-                    printf("> 1. Yes\n");
-                    SetColor(0x0F);
-                    printf("   2. No\n");
-                } else if (choice == 1) {
-                    gotoxy(1, choice + 1);
-                    printf("  1. Yes\n");
-                    SetColor(0x0E);
-                    printf(" > 2. No\n");
-                    SetColor(0x0F);
+                if (updated) {
+                    if (choice == 0) {
+                        gotoxy(1, 1);
+                        SetColor(0x0E);
+                        printf("> 1. Yes");
+                        gotoxy(1, 2);
+                        SetColor(0x0F);
+                        printf("  2. No\n");
+                    } else if (choice == 1) {
+                        gotoxy(1, 1);
+                        printf("  1. Yes");
+                        SetColor(0x0E);
+                        gotoxy(1, 2);
+                        printf("> 2. No\n");
+                        SetColor(0x0F);
+                    }
+                    updated = 0;
                 }
 
                 if (isKeyPressed(KEY_UP)) {
+                    updated = 1;
                     choice--;
                     if (choice < 0) choice = 1;
                     Sleep(150);
                 }
                 if (isKeyPressed(KEY_DOWN)) {
+                    updated = 1;
                     choice++;
                     if (choice > 1) choice = 0;
                     Sleep(150);
                 }
 
                 if (isKeyPressed(KEY_SPACE)||isKeyPressed(KEY_ENTER)) {
+                    Sleep(150);
+                    gotoxy(1, 3);
                     if (choice == 0) {
-                        printf(" Dungeon generated and saved.\n");
-                        Sleep(1000);
+                        printf(" Choose 1.\n");
+                        
                         return;
                     } else if (choice == 1) {
-                        printf(" Status allocation reset.\n");
-                        Sleep(1000);
-                        return;
+                        printf(" Choose 2.\n");
+                        clearScreen();
+                        printf(" Character Status Allocation\n");
+                        gotoxy(1, baseY + 7); 
+                        printf("Press Space to finalize allocation.     ");
+                        int selectedStat = 0;
+                        updated = 1;
+                        break;
                     } else {
                         printf(" choice error\n");
                         Sleep(1000);
                         return;
                     }
                 }
-                Sleep(100);
             }
-        }
+        } 
         Sleep(100);
     }
 }
