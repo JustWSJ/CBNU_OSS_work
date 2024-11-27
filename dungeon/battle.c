@@ -19,8 +19,7 @@ void battle(Character *player, Character *enemy) {
         printf("\n--- 전투 메뉴 ---\n");
         printf("1. 전투하기\n");
         printf("2. 도망가기\n");
-        printf("3. 스킬 사용\n");
-        printf("4. 인벤토리 열기\n");
+        printf("3. 인벤토리 열기\n");
         printf("선택: ");
 
         int choice;
@@ -85,14 +84,7 @@ void battle(Character *player, Character *enemy) {
                 printf("%s가 %s에게 %d의 피해를 입혔습니다! (남은 체력: %d)\n",
                        enemy->name, player->name, base_damage, player->health);
             }
-        } else if (choice == 3) { // 스킬 사용
-            printf("스킬 사용: 적의 방어력을 감소시킵니다.\n");
-            int debuff = player->intelligence / 2;
-            enemy->agility -= debuff;
-            if (enemy->agility < 0) enemy->agility = 0;
-            printf("%s의 민첩성이 %d 감소했습니다! (현재 민첩성: %d)\n",
-                   enemy->name, debuff, enemy->agility);
-        } else if (choice == 4) { // 아이템 사용
+        } else if (choice == 3) { // 아이템 사용
             printf("아이템 사용: 체력을 회복합니다.\n");
             int heal = 20 + (player->intelligence / 2);
             player->health += heal;
