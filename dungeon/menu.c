@@ -59,8 +59,8 @@ void showStatusAllocation() {
     printf("             Character Status Allocation\n");
     while (1) {
         if (updated) {
-            gotoxy(0,1);
-            printf("             Remaining points: %d      \n\n", points);
+            gotoxy(13,1);
+            printf("Remaining points: %d      \n\n", points);
 
             int baseY = 3;
 
