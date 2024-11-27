@@ -136,16 +136,23 @@ void showStatusAllocation() {
 
         if (points <= 0 && (isKeyPressed(KEY_SPACE)||isKeyPressed(KEY_ENTER))) {
             int choice = 0;
+            clearScreen();
+            printf(" Apply status allocation?\n");
+            printf(" > 1. Yes\n");
+            printf("   2. No\n");
             while (1) {
-                clearScreen();
-                printf("     Apply status allocation?\n");
-                printf("     1. Yes\n");
-                printf("     2. No\n");
-
-                switch (choice) {
-                    case 0: printf("> Yes\n"); break;
-                    case 1: printf("> No\n"); break;
-                    default: choice = 0; break;
+                if (choice == 0) {
+                    gotoxy(1, choice + 1);
+                    SetColor(0x0E);
+                    printf("> 1. Yes\n");
+                    SetColor(0x0F);
+                    printf("   2. No\n");
+                } else if (choice == 1) {
+                    gotoxy(1, choice + 1);
+                    printf("  1. Yes\n");
+                    SetColor(0x0E);
+                    printf(" > 2. No\n");
+                    SetColor(0x0F);
                 }
 
                 if (isKeyPressed(KEY_UP)) {
@@ -161,17 +168,15 @@ void showStatusAllocation() {
 
                 if (isKeyPressed(KEY_SPACE)||isKeyPressed(KEY_ENTER)) {
                     if (choice == 0) {
-                        
-
-                        printf("Dungeon generated and saved.\n");
+                        printf(" Dungeon generated and saved.\n");
                         Sleep(1000);
                         return;
                     } else if (choice == 1) {
-                        printf("Status allocation reset.\n");
+                        printf(" Status allocation reset.\n");
                         Sleep(1000);
                         return;
                     } else {
-                        printf("choice error\n");
+                        printf(" choice error\n");
                         Sleep(1000);
                         return;
                     }
