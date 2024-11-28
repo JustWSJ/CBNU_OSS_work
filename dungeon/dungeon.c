@@ -98,3 +98,12 @@ int DungeonEntrance(int Floor){
         }
     } 
 }
+
+int GenerateDungeon(int floor) {
+    // 보스 방 처리
+    if (floor % 10 == 0) {
+        return -1; // 보스 방에 해당하는 특별 값 (예: -1)
+    }
+    // 일반 던전 처리
+    return (floor / 5) + 5;
+}
