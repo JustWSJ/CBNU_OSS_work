@@ -1,25 +1,30 @@
 #ifndef ITEMS_H
 #define ITEMS_H
 
+#define WEAPON_COUNT 5       // 무기 종류 수
+#define ARMOR_COUNT 5        // 방어구 종류 수
+#define CONSUMABLE_COUNT 5   // 소모품 종류 수
+#define LOOT_COUNT 5         // 전리품 종류 수
+
 // 능력치 구조체
 typedef struct {
-    int health;
-    int strength;
-    int agility;
-    int intelligence;
+    int health;       // 체력
+    int strength;     // 힘
+    int agility;      // 민첩성
+    int intelligence; // 지능
 } Stats;
 
 // 무기 구조체
 typedef struct {
     char name[50];   // 무기 이름
-    Stats statBoost; // 무기가 제공하는 능력치 증가
+    Stats statBoost; // 무기로 증가하는 능력치
     int quantity;    // 무기 개수
 } Weapon;
 
 // 방어구 구조체
 typedef struct {
     char name[50];   // 방어구 이름
-    Stats statBoost; // 방어구가 제공하는 능력치 증가
+    Stats statBoost; // 방어구로 증가하는 능력치
     int quantity;    // 방어구 개수
 } Armor;
 
@@ -37,10 +42,10 @@ typedef struct {
     int quantity;    // 전리품 개수
 } Loot;
 
-// 외부에서 접근할 수 있는 아이템 배열 선언
-extern Weapon weapons[];
-extern Armor armors[];
-extern Consumable consumables[];
-extern Loot loots[];
+// 외부에서 접근 가능한 아이템 배열 선언
+extern Weapon weapons[WEAPON_COUNT];
+extern Armor armors[ARMOR_COUNT];
+extern Consumable consumables[CONSUMABLE_COUNT];
+extern Loot loots[LOOT_COUNT];
 
-#endif // ITEMS_H
+#endif 
