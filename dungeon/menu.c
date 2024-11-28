@@ -171,7 +171,7 @@ void showStatusAllocation() {
                     gotoxy(1, 3);
                     if (choice == 0) {
                         printf(" Choose 1.\n");
-                        
+                        wait(); //나중에 지우기
                         return;
                     } else if (choice == 1) {
                         printf(" Choose 2.\n");
