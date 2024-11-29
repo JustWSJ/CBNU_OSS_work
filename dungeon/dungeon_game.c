@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "console_util.h"
 #include "menu.h"
+#include "dungeon.h"
+#include "key_input.h"
 
 int mainMenu(void);
 void InitializeSystem(void);
@@ -9,21 +11,28 @@ void InitializeSystem(void);
 int main() {
     InitializeSystem();
     int selectedOption = mainMenu(); // 메인 메뉴 표시 및 선택값 반환
-    gotoxy(17, 7);
     if (selectedOption == 1) {
-        showStatusAllocation();  // 새 게임
-        //printf("New Game\n");
+        showStatusAllocation();
+        clearScreen();
+        printf("설정한 스탯 저장하고 마을 화면 넘어가기\n");
+        wait();// 지우기
+        int floor = SelectFloor();
+        wait(); // 지우기
+        DungeonEntrance(floor);
+        clearScreen();
+        printf("test complete\n");
     } else if (selectedOption == 2) {
         // Load Game 처리
         printf("Load Game\n");
     } else if (selectedOption == 3) {
-        exit(0);  // 종료
+        exit(0);
     }
     pause;                    
     return 0;
 }
 
 void InitializeSystem(void){
+    SetConsoleOutputCP(CP_UTF8); // 콘솔 출력 코드 페이지를 UTF-8로 설정
     CursorView(0);                // 커서 숨기기
     system("COLOR 0F");           // 배경: 검정, 글자색: 흰색
     system("mode con: cols=52 lines=15");       // 콘솔 크기 설정

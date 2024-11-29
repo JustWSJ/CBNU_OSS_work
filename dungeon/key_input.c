@@ -5,3 +5,12 @@
 int isKeyPressed(int key) {
     return (GetAsyncKeyState(key) & 0x8000) != 0;
 }
+
+void wait(){
+    while (1) {
+        if (isKeyPressed(KEY_ENTER)) {
+            Sleep(150);
+            break;
+        }
+    }
+}

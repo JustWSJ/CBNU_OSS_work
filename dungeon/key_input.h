@@ -12,5 +12,6 @@
 
 // 키 입력 확인 함수 선언
 int isKeyPressed(int key);
+void wait();
 
 #endif
