@@ -12,6 +12,8 @@ typedef struct {
     int strength;     // 힘
     int agility;      // 민첩성
     int intelligence; // 지능
+    int sensory;      // 감각
+    int luck;         // 운
 } Stats;
 
 // 무기 구조체
@@ -48,4 +50,4 @@ extern Armor armors[ARMOR_COUNT];
 extern Consumable consumables[CONSUMABLE_COUNT];
 extern Loot loots[LOOT_COUNT];
 
-#endif 
+#endif // ITEMS_H
