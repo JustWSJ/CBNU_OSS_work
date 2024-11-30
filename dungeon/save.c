@@ -1,13 +1,4 @@
 #include <stdio.h>
-typedef struct {
-    char name[50];
-    int health;
-    int strength;
-    int agility;
-    int intelligence;
-    int sensory;
-    int luck;
-} Character;
 
 // 던전과 스테이터스를 저장하는 함수
 void saveDungeonAndStats(const char *filename, int health, int strength, int agility, int intelligence, int sensory, int luck, char dungeon[DUNGEON_SIZE][DUNGEON_SIZE]) {

@@ -1,10 +1,10 @@
 #include <windows.h>
 #include "console_util.h"
-
+//  글자 색
 void SetColor(int color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
-
+//  커서 보이는지 여부
 void CursorView(char show) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO ConsoleCursor;
