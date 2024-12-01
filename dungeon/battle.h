@@ -13,3 +13,6 @@ void displayStats(Character *character);
 void battle(Character *player, Monster *enemy);
 
 #endif
+
+
+
