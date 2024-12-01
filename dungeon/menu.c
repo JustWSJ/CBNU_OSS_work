@@ -89,7 +89,7 @@ void showStatusAllocation() {
     clearScreen();
     printf(" Character Status Allocation\n");
     gotoxy(1, baseY + 7);
-    printf("Press Space to finalize allocation.     ");
+    printf("Press Space or Enter to finalize allocation.     ");
 
     char stat_name[6][15] = {"Health", "Strength", "Agility", "Intelligence", "Sensory", "Luck"};
 

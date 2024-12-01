@@ -23,11 +23,11 @@ int SelectFloor(){
     int selected = 0;       // 선택된 항목 인덱스
     int updated = 1;        // 화면 갱신 여부 (1: 갱신 필요, 0: 갱신 불필요)
 
-
+    printf("던전 입구 선택");
     while (1) {
         // 메뉴 출력 (updated가 1일 때만)
         if (updated) {
-            for (int i = 0; i < MENU_COUNT; i++) {
+                for (int i = 0; i < MENU_COUNT; i++) {
                 gotoxy(INDENT, GAP + i);
                 if (i == selected) {
                     SetColor(0x0E); // 선택된 메뉴: 노란색

@@ -18,9 +18,9 @@ int main() {
         wait();// 지우기
         int floor = SelectFloor();
         wait(); // 지우기
-        DungeonEntrance(floor);
+        int entranceOption = DungeonEntrance(floor);
         clearScreen();
-        printf("test complete\n");
+        printf("test complete: %d\n", entranceOption);
     } else if (selectedOption == 2) {
         // Load Game 처리
         printf("Load Game\n");
