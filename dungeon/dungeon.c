@@ -34,7 +34,9 @@ void Dungeon(){
 
 void DungeonAdventure(int floor){
     clearScreen();
-    char **map = CreateDungeon(floor);
+    char **map;
+    map = CreateDungeon(floor);
+    MoveDungeon(map);
     wait(); // 지우기
     return;
 }
@@ -143,7 +145,7 @@ int DungeonSize(int floor) {
         return 7;
     } else {
         // 나머지 층
-        return 12;
+        return 17;
     }
 }
 
@@ -164,6 +166,7 @@ char** CreateDungeon(int floor) {
         }
     }
 
+    dungeon[0][size/2] = 'E';
     //draw Map
     clearScreen();
     printf(" 던전 %d층: %dx%d", floor, size - 2, size - 2);
@@ -172,9 +175,15 @@ char** CreateDungeon(int floor) {
             gotoxy(INDENT + (j * 2), GAP + i);
             if (dungeon[i][j] == 'W'){
                 printf("□ ");
+            } else if (dungeon[i][j] == 'E') {
+                printf("● ");
             }
         }
     }
 
     return dungeon;
+}
+
+void MoveDungeon(char **map){
+    return;
 }

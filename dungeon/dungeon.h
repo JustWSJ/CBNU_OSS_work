@@ -8,4 +8,6 @@ int isClear(int floor);
 int DungeonSize(int floor);
 char** CreateDungeon(int floor);
 void DungeonAdventure(int floor);
+void MoveDungeon(char **map);
+
 #endif
