@@ -10,13 +10,26 @@
 
 void Dungeon(){
     int floor = SelectFloor();
-    if (DungeonEntrance(floor)==0) {
-        int size = DungeonSize(floor);
-        clearScreen();
-        printf("%d...\n", size);
-        int **map = CreateDungeon(size);
-        return;
-    } else return;
+    int option = DungeonEntrance(floor);
+    while (1){
+        if (option==0) {
+            DungeonAdventure(floor);
+            floor++;
+            if (floor == 100) break;
+        } else {
+            clearScreen();
+            printf("마을로 돌아갑니다.\n");
+            wait();
+            return;
+        }
+    }
+    return;
+}
+
+void DungeonAdventure(int floor){
+    int **map = CreateDungeon(floor);
+
+
 }
 
 int SelectFloor(){
@@ -126,9 +139,12 @@ int** CreateDungeon(int floor) {
     if (size == -1) {
         printf("Boss floor! No dungeon grid created.\n");
         return NULL;
+    } else if (size == -2) {
+        printf("already cleared floor.\n");
+        return NULL;
     }
 
-    size *= size; // 이차원 배열의 크기는 DungeonSize의 결과값을 제곱한 값
+    //size *= size; // 이차원 배열의 크기는 DungeonSize의 결과값을 제곱한 값
 
     // 이차원 배열 동적 할당
     int** dungeon = (int**)malloc(size * sizeof(int*));
@@ -140,5 +156,15 @@ int** CreateDungeon(int floor) {
     }
 
     printf("Dungeon of size %dx%d created for floor %d.\n", size, size, floor);
+    wait(); // 지우기
     return dungeon;
+}
+
+void DrawDungeon(int dungeonSize){
+     for (int i = 0; i < dungeonSize; i++) {
+        for (int j = 0; j < dungeonSize; j++) {
+            gotoxy(j, i); // x 좌표는 칸당 두 칸씩 띄움
+            printf("□");
+        }
+    }
 }
