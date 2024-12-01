@@ -2,7 +2,7 @@
 #define CHARACTER_H
 
 typedef struct {
-    char name[50];
+    char name[8];
     int health;
     int strength;
     int agility;
