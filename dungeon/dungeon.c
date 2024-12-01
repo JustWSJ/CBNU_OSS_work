@@ -34,9 +34,14 @@ void Dungeon(){
 
 void DungeonAdventure(int floor){
     clearScreen();
+    int size = DungeonSize(floor);
     char **map;
-    map = CreateDungeon(floor);
-    MoveDungeon(map);
+    map = CreateDungeon(floor, size);
+    if (*map == NULL) {
+        printf("NULL");
+    } else {
+        MoveDungeon(map, size);
+    }
     wait(); // 지우기
     return;
 }
@@ -149,8 +154,7 @@ int DungeonSize(int floor) {
     }
 }
 
-char** CreateDungeon(int floor) {
-    int size = DungeonSize(floor);
+char** CreateDungeon(int floor, int size) {
     
     if (size == -1 || size == -2) {
         return NULL;
@@ -184,6 +188,12 @@ char** CreateDungeon(int floor) {
     return dungeon;
 }
 
-void MoveDungeon(char **map){
+void MoveDungeon(char **map, int size){
+    int locv, loch;
+    locv = 0;
+    loch = size/2;
+    locv++;
+    gotoxy((loch*2) + INDENT, locv + GAP);
+    printf("● ");
     return;
 }
