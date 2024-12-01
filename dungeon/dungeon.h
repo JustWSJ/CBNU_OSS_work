@@ -3,5 +3,5 @@
 
 int SelectFloor();
 int DungeonEntrance(int Floor);
-
+int GenerateDungeon(int floor);
 #endif
