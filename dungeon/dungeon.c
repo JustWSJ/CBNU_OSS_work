@@ -13,9 +13,14 @@ void Dungeon(){
     int option = DungeonEntrance(floor);
     while (1){
         if (option==0) {
-            DungeonAdventure(floor);
             floor++;
-            if (floor == 100) break;
+            DungeonAdventure(floor);
+            if (floor == 100) {
+                clearScreen();
+                printf("Dungeon Clear!\n");
+                wait();
+                exit(0);
+            } else if (isClear(floor)) option = DungeonEntrance(floor);
         } else {
             clearScreen();
             printf("마을로 돌아갑니다.\n");
@@ -29,7 +34,7 @@ void Dungeon(){
 void DungeonAdventure(int floor){
     int **map = CreateDungeon(floor);
 
-
+    return;
 }
 
 int SelectFloor(){
@@ -111,13 +116,17 @@ int DungeonEntrance(int Floor){
             Sleep(150);
         } else if (isKeyPressed(KEY_ENTER) || isKeyPressed(KEY_SPACE)) {
             Sleep(150);
+            clearScreen();
             return choice; // 선택된 메뉴 반환 (0: 다음 층, 1: 마을로 돌아가기)
         }
     } 
 }
 
 int isClear(int floor){
-    return 1;
+    // 나중에 조건 바꿔야함
+    if (floor % 10 == 0) {
+        return 1;
+    } else return 0;
 }
 
 int DungeonSize(int floor) {

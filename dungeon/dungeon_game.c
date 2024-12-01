@@ -19,7 +19,6 @@ int main() {
         printf("설정한 스탯 저장하고 마을 화면 넘어가기. Press Enter.\n");
         wait(); // 지우기
         Dungeon();
-        wait(); //지우기
         clearScreen();
         printf("test complete: \n");
 
