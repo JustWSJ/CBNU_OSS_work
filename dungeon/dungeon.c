@@ -1,21 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include "console_util.h"
 #include "key_input.h"
-
-#define DUNGEON_SIZE_INCREASE_STEP 5  // 던전 크기 증가 값
-#define LEVEL_INCREASE_STEP 5  // 던전 크기 증가 주기 (5계층마다)
-
-#include <stdio.h>
-#include <stdlib.h>
-#include "console_util.h"
-#include "key_input.h"
+#include "dungeon.h"
 
 #define MENU_COUNT 10       // 메뉴 항목 개수
 #define INDENT 1            // 메뉴의 왼쪽 들여쓰기
 #define GAP 1
 
+void Dungeon(){
+    int floor = SelectFloor();
+    if (DungeonEntrance(floor)==0) {
+        int testcase = DungeonSize(floor);
+        clearScreen();
+        printf("%d...\n", testcase);
+        return;
+    } else return;
+}
 
 int SelectFloor(){
     clearScreen();
@@ -50,6 +51,7 @@ int SelectFloor(){
             updated = 1; // 선택 항목 변경, 화면 갱신 필요
             Sleep(150);
         } else if (isKeyPressed(KEY_ENTER) || isKeyPressed(KEY_SPACE)) {
+            Sleep(150);
             return floors[selected]; // 선택된 층 반환
         }
     }
@@ -94,16 +96,25 @@ int DungeonEntrance(int Floor){
             updated = 1; // 선택 항목 변경, 화면 갱신 필요
             Sleep(150);
         } else if (isKeyPressed(KEY_ENTER) || isKeyPressed(KEY_SPACE)) {
+            Sleep(150);
             return choice; // 선택된 메뉴 반환 (0: 다음 층, 1: 마을로 돌아가기)
         }
     } 
 }
 
-int GenerateDungeon(int floor) {
-    // 보스 방 처리
-    if (floor % 10 == 0) {
-        return -1; // 보스 방에 해당하는 특별 값 (예: -1)
+int isClear(int floor){
+    return 1;
+}
+
+int DungeonSize(int floor) {
+    if (isClear(floor) == 0 && floor % 10 == 0) {
+        // 보스 방 처리
+        return -1;
+    } else if (floor % 10 == 0) {
+        //클리어 된 보스 방
+        return -2;
+    }else {
+        // 일반 던전 처리
+        return (floor / 5) + 5;
     }
-    // 일반 던전 처리
-    return (floor / 5) + 5;
 }

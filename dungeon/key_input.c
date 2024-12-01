@@ -8,7 +8,7 @@ int isKeyPressed(int key) {
 
 void wait(){
     while (1) {
-        if (isKeyPressed(KEY_ENTER)) {
+        if (isKeyPressed(KEY_ENTER) || isKeyPressed(KEY_SPACE)) {
             Sleep(150);
             break;
         }

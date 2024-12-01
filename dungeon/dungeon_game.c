@@ -15,12 +15,11 @@ int main() {
         showStatusAllocation();
         clearScreen();
         printf("설정한 스탯 저장하고 마을 화면 넘어가기\n");
-        wait();// 지우기
-        int floor = SelectFloor();
         wait(); // 지우기
-        int entranceOption = DungeonEntrance(floor);
+        Dungeon();
+        wait(); //지우기
         clearScreen();
-        printf("test complete: %d\n", entranceOption);
+        printf("test complete: \n");
     } else if (selectedOption == 2) {
         // Load Game 처리
         printf("Load Game\n");
