@@ -3,11 +3,11 @@
 
 //  일반 몬스터
 //  {"name", hp, atk, def}
-Monster M_001 = {"bat", 40, 10, 5};
-Monster M_002 = {"slime", 90, 5, 10};
-Monster M_003 = {"M_003", 100, 5, 5};
-Monster M_004 = {"M_004", 100, 5, 5};
-Monster M_005 = {"M_005", 100, 5, 5};
+Monster M_001 = {"M_001", 10, 2, 4};
+Monster M_002 = {"M_002", 40, 10, 5};
+Monster M_003 = {"M_003", 90, 2, 10};
+Monster M_004 = {"M_004", 60, 1, 20};
+Monster M_005 = {"M_005", 40, 20, 1};
 
 // 위에 정의되어있는 몬스터 정보 구조체 주소를 반환함
 Monster* getMonster(int Monster_value) {
