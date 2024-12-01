@@ -11,9 +11,10 @@
 void Dungeon(){
     int floor = SelectFloor();
     if (DungeonEntrance(floor)==0) {
-        int testcase = DungeonSize(floor);
+        int size = DungeonSize(floor);
         clearScreen();
-        printf("%d...\n", testcase);
+        printf("%d...\n", size);
+        int **map = CreateDungeon(size);
         return;
     } else return;
 }
@@ -117,4 +118,27 @@ int DungeonSize(int floor) {
         // 일반 던전 처리
         return (floor / 5) + 5;
     }
+}
+
+int** CreateDungeon(int floor) {
+    int size = DungeonSize(floor);
+    
+    if (size == -1) {
+        printf("Boss floor! No dungeon grid created.\n");
+        return NULL;
+    }
+
+    size *= size; // 이차원 배열의 크기는 DungeonSize의 결과값을 제곱한 값
+
+    // 이차원 배열 동적 할당
+    int** dungeon = (int**)malloc(size * sizeof(int*));
+    for (int i = 0; i < size; i++) {
+        dungeon[i] = (int*)malloc(size * sizeof(int));
+        for (int j = 0; j < size; j++) {
+            dungeon[i][j] = 0; // 기본값 초기화 (0으로 설정)
+        }
+    }
+
+    printf("Dungeon of size %dx%d created for floor %d.\n", size, size, floor);
+    return dungeon;
 }

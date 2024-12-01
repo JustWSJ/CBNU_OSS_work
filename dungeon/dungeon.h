@@ -6,4 +6,6 @@ int SelectFloor();
 int DungeonEntrance(int Floor);
 int isClear(int floor);
 int DungeonSize(int floor);
+int** CreateDungeon(int floor);
+
 #endif

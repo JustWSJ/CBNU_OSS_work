@@ -13,6 +13,7 @@ int main() {
     int selectedOption = mainMenu(); // 메인 메뉴 표시 및 선택값 반환
     if (selectedOption == 1) {
         showStatusAllocation();
+
         clearScreen();
         printf("설정한 스탯 저장하고 마을 화면 넘어가기\n");
         wait(); // 지우기
@@ -20,6 +21,7 @@ int main() {
         wait(); //지우기
         clearScreen();
         printf("test complete: \n");
+        
     } else if (selectedOption == 2) {
         // Load Game 처리
         printf("Load Game\n");
