@@ -13,17 +13,13 @@ Monster M_005 = {"M_005", 40, 20, 1};
 Monster* getMonster(int Monster_value) {
     if(Monster_value == 1){
         return &M_001;
-    }
-    else if(Monster_value == 2){
+    } else if (Monster_value == 2){
         return &M_002;
-    }
-    else if(Monster_value == 3){
+    } else if (Monster_value == 3){
         return &M_003;
-    }
-    else if(Monster_value == 4){
+    } else if (Monster_value == 4){
         return &M_004;
-    }
-    else if(Monster_value == 5){
+    } else if (Monster_value == 5){
         return &M_005;
     }
 }
