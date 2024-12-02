@@ -178,9 +178,9 @@ char** CreateDungeon(int floor, int size) {
         for (int j = 0; j < size; j++) {
             gotoxy(INDENT + (j * 2), GAP + i);
             if (dungeon[i][j] == 'W'){
-                printf("□ ");
+                printf("□");
             } else if (dungeon[i][j] == 'E') {
-                printf("● ");
+                printf("●");
             }
         }
     }
@@ -192,8 +192,11 @@ void MoveDungeon(char **map, int size){
     int locv, loch;
     locv = 0;
     loch = size/2;
-    locv++;
+    waitKeyDown();
     gotoxy((loch*2) + INDENT, locv + GAP);
-    printf("● ");
+    printf("□");
+    gotoxy((loch*2) + INDENT, (++locv) + GAP);
+    printf("●");
+    //여기서부터 반복에, 강제이벤트/보스 체크 후 아니면 이벤트 진행 확인 및 무빙
     return;
 }

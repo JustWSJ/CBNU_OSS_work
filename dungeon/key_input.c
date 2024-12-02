@@ -14,3 +14,12 @@ void wait(){
         }
     }
 }
+
+void waitKeyDown(){
+    while (1) {
+        if (isKeyPressed(KEY_DOWN)) {
+            Sleep(150);
+            break;
+        }
+    }
+}
