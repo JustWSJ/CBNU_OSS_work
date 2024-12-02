@@ -9,6 +9,7 @@ typedef struct {
     int intelligence;
     int sensory;
     int luck;
+    int Maxfloor;
 } Character;
 
 // Getter/Setter 함수 선언
