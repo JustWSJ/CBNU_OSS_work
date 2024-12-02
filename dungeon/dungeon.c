@@ -42,7 +42,6 @@ void DungeonAdventure(int floor){
     } else {
         MoveDungeon(map, size);
     }
-    wait(); // 지우기
     return;
 }
 
@@ -171,9 +170,10 @@ char** CreateDungeon(int floor, int size) {
     }
 
     dungeon[0][size/2] = 'E';
+    dungeon[size-2][size-2] = 'X';
     //draw Map
     clearScreen();
-    printf(" 던전 %d층: %dx%d", floor, size - 2, size - 2);
+    printf(" 던전 %d층: %dx%d  이동: 방향키, 탐사: ENTER/SPACE", floor, size - 2, size - 2);
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             gotoxy(INDENT + (j * 2), GAP + i);
@@ -197,6 +197,87 @@ void MoveDungeon(char **map, int size){
     printf("□");
     gotoxy((loch*2) + INDENT, (++locv) + GAP);
     printf("●");
-    //여기서부터 반복에, 강제이벤트/보스 체크 후 아니면 이벤트 진행 확인 및 무빙
+    Sleep(150);
+    //여기서부터 반복에, 강제이벤트/보스 체크 후 아니면 이벤트 진행 확인 및 무빙(벽 확인)
+    while(1){
+        int P_Event = check_P_Event(map[locv][loch]);
+        if (P_Event) {
+            if (map[locv][loch] == 'X') break;
+            else map[locv][loch] = 'R';
+        }
+        while(map[locv][loch] == 'R' || map[locv][loch] == 'S'|| map[locv][loch] == 'I'){
+            if (isKeyPressed(KEY_ENTER) || isKeyPressed(KEY_SPACE)) {
+                //R이면 뭐 없음
+                //S이면 전투
+                //I이면 랜덤 이벤트
+            }
+            // 이동위치한 곳 벽인지 확인 후 브레이크! 
+            if (isKeyPressed(KEY_UP) && locv - 1 > 0 && !check_W(map[locv - 1][loch])) {
+                Erase_loc(locv, loch);
+                locv--;
+                draw_loc(locv, loch);
+                Sleep(150);
+                break;
+            }
+            if (isKeyPressed(KEY_DOWN) && locv + 1 < size - 1 && !check_W(map[locv + 1][loch])){
+                Erase_loc(locv, loch);
+                locv++;
+                draw_loc(locv, loch);
+                Sleep(150);
+                break;
+            }
+            if (isKeyPressed(KEY_LEFT) && loch - 1 > 0 && !check_W(map[locv][loch - 1])){
+                Erase_loc(locv, loch);
+                loch--;
+                draw_loc(locv, loch);
+                Sleep(150);
+                break;
+            }
+            if (isKeyPressed(KEY_RIGHT) && loch + 1 < size - 1 && !check_W(map[locv][loch + 1])){
+                Erase_loc(locv, loch);
+                loch++;
+                draw_loc(locv, loch);
+                Sleep(150);
+                break;
+            }
+        }
+    }
     return;
 }
+
+int check_P_Event(char c){
+    if (c == 'B') return 1;
+    else if (c == 'F') return 2;
+    else if (c == 'K') return 3;
+    else if (c == 'X') return 4;
+    else return 0;
+}
+
+int check_W(char c){
+    if (c == 'W') {
+        return 1;
+    } else return 0;
+}
+
+void Erase_loc(int locv, int loch){
+    gotoxy((loch*2) + INDENT, locv + GAP);
+    printf("  ");
+    return;
+}
+
+void draw_loc(int locv, int loch){
+    gotoxy((loch*2) + INDENT, locv + GAP);
+    printf("●");
+    return;
+}
+
+// *B (Battle): 강제 전투
+// 1E (Entrance): 입구
+// *F (Force): 강제 이벤트
+// .I (Inventory): 수색 후 아이템(이나 스테이터스?) 얻는 이벤트
+// *K (King): 보스 전투
+// (L) (Location): 플레이어의 현재 위치 (사용할지는 미지수, 다른 창 넘기는 방식이면 써야 함)
+// R (Road): 수색 불가능한 길
+// .S (Search): 수색 후 전투
+// 0W (Wall): 벽. 막힘
+// *X (eXit): 출구

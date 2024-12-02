@@ -28,7 +28,7 @@ int main() {
     } else if (selectedOption == 3) {
         exit(0);
     }
-    pause;                    
+    pause;
     return 0;
 }
 
