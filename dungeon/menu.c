@@ -1,8 +1,37 @@
+//
 #include <stdio.h>
+#include "character.h"
 #include "console_util.h"
 #include "key_input.h"
+
 #define MENU_COUNT 3
 #define INDENT 15
+const char *stat_name[6] = {"Health", "Strength", "Agility", "Intelligence", "Sensory", "Luck"};
+
+// 스탯 ID에 따라 값을 업데이트
+void updateStat(Character *player, int statID, int delta) {
+    switch (statID) {
+        case 0: player->health += delta; break;
+        case 1: player->strength += delta; break;
+        case 2: player->agility += delta; break;
+        case 3: player->intelligence += delta; break;
+        case 4: player->sensory += delta; break;
+        case 5: player->luck += delta; break;
+    }
+}
+
+// 현재 스탯 값을 가져오기
+int getStatValue(Character *player, int statID) {
+    switch (statID) {
+        case 0: return player->health;
+        case 1: return player->strength;
+        case 2: return player->agility;
+        case 3: return player->intelligence;
+        case 4: return player->sensory;
+        case 5: return player->luck;
+        default: return 0;
+    }
+}
 
 int mainMenu(void) {
     int selected = 0; // 현재 선택된 메뉴 (0부터 시작)
@@ -60,7 +89,7 @@ void showStatusAllocation() {
     clearScreen();
     printf(" Character Status Allocation\n");
     gotoxy(1, baseY + 7);
-    printf("Press Space to finalize allocation.     ");
+    printf("Press Space or Enter to finalize allocation.     ");
 
     char stat_name[6][15] = {"Health", "Strength", "Agility", "Intelligence", "Sensory", "Luck"};
 
@@ -157,24 +186,21 @@ void showStatusAllocation() {
                     updated = 1;
                     choice--;
                     if (choice < 0) choice = 1;
-                    Sleep(150);
+                    Sleep(130);
                 }
                 if (isKeyPressed(KEY_DOWN)) {
                     updated = 1;
                     choice++;
                     if (choice > 1) choice = 0;
-                    Sleep(150);
+                    Sleep(130);
                 }
 
                 if (isKeyPressed(KEY_SPACE)||isKeyPressed(KEY_ENTER)) {
                     Sleep(150);
                     gotoxy(1, 3);
                     if (choice == 0) {
-                        printf(" Choose 1.\n");
-                        wait(); //나중에 지우기
                         return;
                     } else if (choice == 1) {
-                        printf(" Choose 2.\n");
                         clearScreen();
                         printf(" Character Status Allocation\n");
                         gotoxy(1, baseY + 7); 
