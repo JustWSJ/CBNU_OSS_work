@@ -170,7 +170,13 @@ char** CreateDungeon(int floor, int size) {
     }
 
     dungeon[0][size/2] = 'E';
-    dungeon[size-2][size-2] = 'X';
+    dungeon[size-2][size-2] = 'X'; //테스트용 나중에 랜덤 배정
+    dungeon[1][size/2] = 'B';
+    dungeon[2][size/2] = 'F';
+    dungeon[3][size/2] = 'K';
+    dungeon[4][size/2] = 'S';
+    dungeon[5][size/2] = 'I';
+
     //draw Map
     clearScreen();
     printf(" 던전 %d층: %dx%d  이동: 방향키, 탐사: ENTER/SPACE", floor, size - 2, size - 2);
@@ -203,13 +209,28 @@ void MoveDungeon(char **map, int size){
         int P_Event = check_P_Event(map[locv][loch]);
         if (P_Event) {
             if (map[locv][loch] == 'X') break;
-            else map[locv][loch] = 'R';
+            else {
+                gotoxy(40,1); //테스트용
+                printf("%c scaned.", map[locv][loch]); // 테스트용
+                //콜이벤트(char);
+                map[locv][loch] = 'R';
+            }
         }
         while(map[locv][loch] == 'R' || map[locv][loch] == 'S'|| map[locv][loch] == 'I'){
             if (isKeyPressed(KEY_ENTER) || isKeyPressed(KEY_SPACE)) {
                 //R이면 뭐 없음
-                //S이면 전투
-                //I이면 랜덤 이벤트
+                if (map[locv][loch]=='R') {
+                    gotoxy(40,1);
+                    printf("%c scaned.", map[locv][loch]); //테스트용
+                } else if (map[locv][loch] == 'S') {
+                    //S이면 전투
+                    gotoxy(40,1);
+                    printf("%c scaned.", map[locv][loch]); //테스트용
+                } else if (map[locv][loch] == 'I') {
+                    //I이면 랜덤 이벤트
+                    gotoxy(40,1);
+                    printf("%c scaned.", map[locv][loch]); //테스트용
+                }
             }
             // 이동위치한 곳 벽인지 확인 후 브레이크! 
             if (isKeyPressed(KEY_UP) && locv - 1 > 0 && !check_W(map[locv - 1][loch])) {
