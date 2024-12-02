@@ -186,13 +186,13 @@ void showStatusAllocation() {
                     updated = 1;
                     choice--;
                     if (choice < 0) choice = 1;
-                    Sleep(150);
+                    Sleep(130);
                 }
                 if (isKeyPressed(KEY_DOWN)) {
                     updated = 1;
                     choice++;
                     if (choice > 1) choice = 0;
-                    Sleep(150);
+                    Sleep(130);
                 }
 
                 if (isKeyPressed(KEY_SPACE)||isKeyPressed(KEY_ENTER)) {
