@@ -226,11 +226,14 @@ void MoveDungeon(char **map, int size){
                     //S이면 전투
                     gotoxy(40,1);
                     printf("%c scaned.", map[locv][loch]); //테스트용
+                    map[locv][loch] = 'R';
                 } else if (map[locv][loch] == 'I') {
                     //I이면 랜덤 이벤트
                     gotoxy(40,1);
                     printf("%c scaned.", map[locv][loch]); //테스트용
+                    map[locv][loch] = 'R';
                 }
+                Sleep(150);
             }
             // 이동위치한 곳 벽인지 확인 후 브레이크! 
             if (isKeyPressed(KEY_UP) && locv - 1 > 0 && !check_W(map[locv - 1][loch])) {
