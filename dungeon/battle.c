@@ -3,55 +3,45 @@
 #include <time.h>
 #include "battle.h"
 
-// 플레이어 공격 함수
-void playerAttack(Character *player, Monster *enemy) {
-    int enamy_hp = enemy->M_hp; // 적 체력을 지역 변수로 복사
-    int damage = (player->strength * 2) - (enemy->M_def);
+// 공격 함수
+void attack(Character *attacker, Character *defender) {
+    if (dodge(attacker, defender)) {
+        printf("%s이(가) 공격을 회피했습니다!\n", defender->name);
+        return;
+    }
+
+    int damage = (attacker->strength * 2) - (defender->agility / 2);
     if (damage < 0) damage = 0;
 
     // 치명타 계산
-    if (rand() % 100 < player->luck) {
+    if (rand() % 100 < attacker->luck) {
         damage *= 2;
         printf("치명타! ");
     }
 
-    enamy_hp -= damage; // 지역 변수로 적 체력 갱신
-    if (enamy_hp < 0) enamy_hp = 0;
-
-    enemy->M_hp = enamy_hp; // 수정된 체력을 실제 구조체에 반영
-    printf("%s가 %s에게 %d의 피해를 입혔습니다! (적 남은 체력: %d)\n",
-           player->name, enemy->name, damage, enemy->M_hp);
+    defender->health -= damage;
+    printf("%s이(가) %s에게 %d 데미지를 입혔습니다! (남은 체력: %d)\n",
+           attacker->name, defender->name, damage, defender->health);
 }
 
-// 몬스터 공격 함수
-void monsterAttack(Monster *monster, Character *player) {
-    int damage = (monster->M_atk) - (player->agility / 2);
-    if (damage < 0) damage = 0;
-
-    player->health -= damage;
-    if (player->health < 0) player->health = 0;
-
-    printf("%s가 %s에게 %d의 피해를 입혔습니다! (플레이어 남은 체력: %d)\n",
-           monster->name, player->name, damage, player->health);
-}
-
-// 도망 함수 (플레이어 민첩 기준)
-int escape(Character *player, Monster *enemy) {
-    int escapeChance = (player->agility * 2) + (rand() % 50); // 민첩성 기반 + 랜덤 0~49
-    printf("도망 확률: %d (기준: 100)\n", escapeChance);
-
-    if (escapeChance > 100) {
-        printf("%s가 성공적으로 도망쳤습니다!\n", player->name);
+// 도망 함수
+int escape(Character *player, Character *enemy) {
+    int escapeChance = (player->agility * 100) / (enemy->agility + 50);
+    int randomRoll = rand() % 100;
+    printf("도망 확률: %d%%, 결과: %d\n", escapeChance, randomRoll);
+    if (randomRoll < escapeChance) {
+        printf("성공적으로 도망쳤습니다!\n");
         return 1; // 도망 성공
     } else {
-        printf("%s가 도망에 실패했습니다!\n", player->name);
+        printf("도망에 실패했습니다!\n");
         return 0; // 도망 실패
     }
 }
 
-// 회피 함수 (민첩성 기준)
+// 회피 함수
 int dodge(Character *attacker, Character *defender) {
-    int dodgeChance = defender->agility; // 민첩성만 기준
+    int dodgeChance = defender->agility - (attacker->agility / 2);
+    if (dodgeChance < 0) dodgeChance = 0;
     int randomRoll = rand() % 100;
     return randomRoll < dodgeChance;
 }
