@@ -4,6 +4,34 @@
 #include "console_util.h"
 #include "key_input.h"
 #include "inventory.h"
+// 전역 인벤토리 초기화
+Inventory playerInventory = { .itemCount = 0 };
+
+// 새로 추가된 함수: 인벤토리 초기화
+void initializeInventory() {
+    playerInventory.itemCount = 0;
+}
+
+// 새로 추가된 함수: 아이템 추가
+void addItemToInventory(Item newItem) {
+    if (playerInventory.itemCount >= MAX_ITEMS) {
+        printf("인벤토리가 가득 찼습니다!\n");
+        return;
+    }
+
+    // 동일한 아이템이 있으면 수량 증가
+    for (int i = 0; i < playerInventory.itemCount; i++) {
+        if (strcmp(playerInventory.items[i].name, newItem.name) == 0) {
+            playerInventory.items[i].quantity += newItem.quantity;
+            printf("%s 수량이 증가했습니다: %d\n", newItem.name, playerInventory.items[i].quantity);
+            return;
+        }
+    }
+
+    // 새로운 아이템 추가
+    playerInventory.items[playerInventory.itemCount++] = newItem;
+    printf("%s을(를) 인벤토리에 추가했습니다.\n", newItem.name);
+}
 
 // 전역 인벤토리 초기화
 Inventory playerInventory = { .itemCount = 0 };

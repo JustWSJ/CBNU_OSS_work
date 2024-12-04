@@ -9,17 +9,23 @@ Monster M_003 = {"M_003", 90, 2, 10};
 Monster M_004 = {"M_004", 60, 1, 20};
 Monster M_005 = {"M_005", 40, 20, 1};
 
+//  boss monster
+Monster M_1001 = {"M_1001", 500, 80, 30};
+
 // 위에 정의되어있는 몬스터 정보 구조체 주소를 반환함
 Monster* getMonster(int Monster_value) {
-    if(Monster_value == 1){
+    switch(Monster_value){
+        case 1:
         return &M_001;
-    } else if (Monster_value == 2){
+        case 2:
         return &M_002;
-    } else if (Monster_value == 3){
+        case 3:
         return &M_003;
-    } else if (Monster_value == 4){
+        case 4:
         return &M_004;
-    } else if (Monster_value == 5){
+        case 5:
         return &M_005;
+        case 1001:
+        return &M_1001;
     }
 }
