@@ -1,4 +1,3 @@
-//
 #include <stdio.h>
 #include "character.h"
 #include "console_util.h"
