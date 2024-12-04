@@ -1,113 +1,129 @@
 #include <stdio.h>
+#include <string.h>
+#include <windows.h> // Sleep 함수 사용
 #include "console_util.h"
 #include "key_input.h"
 #include "inventory.h"
 
-// 인벤토리 메인 메뉴
-void showInventory() {
-    InventoryState state = {-1, {0}, 0}; // 초기 상태: 무기 미장착, 방어구 없음
-    int selectedCategory = 0; // 0: 장비, 1: 소모품, 2: 전리품, 3: 돌아가기
-    const char* categories[] = {"Equipment", "Consumables", "Loot", "Back"}; // 메뉴 항목
+// 전역 인벤토리 초기화
+Inventory playerInventory = { .itemCount = 0 };
+
+// 인벤토리 초기화 함수
+void initializeInventory() {
+    playerInventory.itemCount = 0;
+}
+
+// 아이템 추가 함수
+void addItemToInventory(Item newItem) {
+    if (playerInventory.itemCount >= MAX_ITEMS) {
+        printf("인벤토리가 가득 찼습니다!\n");
+        return;
+    }
+
+    // 동일한 아이템 확인
+    for (int i = 0; i < playerInventory.itemCount; i++) {
+        if (strcmp(playerInventory.items[i].name, newItem.name) == 0) {
+            playerInventory.items[i].quantity += newItem.quantity;
+            printf("%s 수량이 증가했습니다: %d\n", newItem.name, playerInventory.items[i].quantity);
+            return;
+        }
+    }
+
+    // 새로운 아이템 추가
+    playerInventory.items[playerInventory.itemCount++] = newItem;
+    printf("%s을(를) 인벤토리에 추가했습니다.\n", newItem.name);
+}
+
+// 공통 메뉴 탐색 함수
+int navigateMenu(const char* menuItems[], int itemCount) {
+    int selected = 0;
 
     while (1) {
-        clearScreen(); // 화면 초기화
-        printf("Inventory\n");
-        printf("================\n");
-
-        // 카테고리 출력
-        for (int i = 0; i < 4; i++) {
+        clearScreen();
+        for (int i = 0; i < itemCount; i++) {
             gotoxy(1, i + 1);
-            if (i == selectedCategory) {
-                SetColor(0x0E); // 선택된 항목은 노란색으로 표시
-                printf("> %s\n", categories[i]);
+            if (i == selected) {
+                SetColor(0x0E); // 노란색 표시
+                printf("> %s\n", menuItems[i]);
                 SetColor(0x0F); // 기본 색상 복원
             } else {
-                printf("  %s\n", categories[i]);
+                printf("  %s\n", menuItems[i]);
             }
         }
 
-        // 방향키 및 스페이스 키 입력 처리
+        // 방향키 입력 처리
         if (isKeyPressed(KEY_UP)) {
-            selectedCategory = (selectedCategory - 1 + 4) % 4; // 위로 이동
+            selected = (selected - 1 + itemCount) % itemCount;
             Sleep(150);
         } else if (isKeyPressed(KEY_DOWN)) {
-            selectedCategory = (selectedCategory + 1) % 4; // 아래로 이동
+            selected = (selected + 1) % itemCount;
             Sleep(150);
         } else if (isKeyPressed(KEY_SPACE)) {
-            // 선택된 카테고리에 따라 함수 호출
-            if (selectedCategory == 0) {
-                manageEquipment(&state);
-            } else if (selectedCategory == 1) {
+            return selected; // 선택된 항목 반환
+        }
+    }
+}
+
+// 인벤토리 메인 메뉴
+void showInventory() {
+    const char* categories[] = {"Equipment", "Consumables", "Loot", "Back"};
+    int selected;
+
+    while (1) {
+        selected = navigateMenu(categories, 4);
+
+        switch (selected) {
+            case 0:
+                manageEquipment(NULL);
+                break;
+            case 1:
                 manageConsumables();
-            } else if (selectedCategory == 2) {
+                break;
+            case 2:
                 manageLoots();
-            } else if (selectedCategory == 3) {
-                return; // 돌아가기
-            }
+                break;
+            case 3:
+                return;
         }
     }
 }
 
 // 장비 관리 메뉴
 void manageEquipment(InventoryState* state) {
-    int selectedType = 0; // 0: 무기, 1: 방어구
-    const char* equipmentTypes[] = {"Weapons", "Armor"}; // 장비 유형
+    const char* equipmentTypes[] = {"Weapons", "Armor", "Back"};
+    int selected;
 
     while (1) {
-        clearScreen(); // 화면 초기화
-        printf("Equipment Management\n");
-        printf("================\n");
+        selected = navigateMenu(equipmentTypes, 3);
 
-        // 장비 유형 출력
-        for (int i = 0; i < 2; i++) {
-            gotoxy(1, i + 1);
-            if (i == selectedType) {
-                SetColor(0x0E); // 선택된 항목 노란색
-                printf("> %s\n", equipmentTypes[i]);
-                SetColor(0x0F);
-            } else {
-                printf("  %s\n", equipmentTypes[i]);
-            }
-        }
-
-        // 방향키 입력 처리
-        if (isKeyPressed(KEY_UP)) {
-            selectedType = (selectedType - 1 + 2) % 2; // 위로 이동
-            Sleep(150);
-        } else if (isKeyPressed(KEY_DOWN)) {
-            selectedType = (selectedType + 1) % 2; // 아래로 이동
-            Sleep(150);
-        } else if (isKeyPressed(KEY_SPACE)) {
-            // 무기 또는 방어구 관리 호출
-            if (selectedType == 0) {
-                manageWeapons(state);
-            } else if (selectedType == 1) {
-                manageArmors(state);
-            }
+        if (selected == 0) {
+            manageWeapons(state);
+        } else if (selected == 1) {
+            manageArmors(state);
+        } else if (selected == 2) {
+            return; // 돌아가기
         }
     }
 }
 
 // 무기 관리
 void manageWeapons(InventoryState* state) {
-    int selectedItem = 0; // 선택된 무기의 인덱스
+    int selectedItem = 0;
 
     while (1) {
-        clearScreen(); // 화면 초기화
+        clearScreen();
         printf("Weapons Management\n");
         printf("================\n");
 
-        // 무기 목록 출력
         for (int i = 0; i < WEAPON_COUNT; i++) {
             gotoxy(1, i + 1);
-            printf("  %s (Qty: %d) [Str: %d Agi: %d]", weapons[i].name, weapons[i].quantity, weapons[i].statBoost.strength, weapons[i].statBoost.agility);
-            if (state->equippedWeaponIndex == i) {
-                printf(" [E]"); // 장착된 무기 표시
+            printf("  %s (Qty: %d) [Str: %d Agi: %d]", weapons[i].name, weapons[i].quantity, weapons[i].effect.strength, weapons[i].effect.agility);
+            if (state && state->equippedWeaponIndex == i) {
+                printf(" [E]");
             }
             printf("\n");
         }
 
-        // 방향키 입력 처리
         if (isKeyPressed(KEY_UP)) {
             selectedItem = (selectedItem - 1 + WEAPON_COUNT) % WEAPON_COUNT;
             Sleep(150);
@@ -115,38 +131,39 @@ void manageWeapons(InventoryState* state) {
             selectedItem = (selectedItem + 1) % WEAPON_COUNT;
             Sleep(150);
         } else if (isKeyPressed(KEY_SPACE)) {
-            // 무기 장착
-            state->equippedWeaponIndex = selectedItem;
-            printf("\nEquipped %s!\n", weapons[selectedItem].name);
-            Sleep(1000);
+            if (state) {
+                state->equippedWeaponIndex = selectedItem;
+                printf("\nEquipped %s!\n", weapons[selectedItem].name);
+                Sleep(1000);
+            }
         } else if (isKeyPressed(KEY_ESCAPE)) {
-            return; // 돌아가기
+            return;
         }
     }
 }
 
 // 방어구 관리
 void manageArmors(InventoryState* state) {
-    int selectedItem = 0; // 선택된 방어구 인덱스
+    int selectedItem = 0;
 
     while (1) {
-        clearScreen(); // 화면 초기화
+        clearScreen();
         printf("Armor Management\n");
         printf("================\n");
 
-        // 방어구 목록 출력
         for (int i = 0; i < ARMOR_COUNT; i++) {
             gotoxy(1, i + 1);
-            printf("  %s (Qty: %d) [HP: %d Int: %d]", armors[i].name, armors[i].quantity, armors[i].statBoost.health, armors[i].statBoost.intelligence);
-            for (int j = 0; j < state->equippedArmorCount; j++) {
-                if (state->equippedArmors[j] == i) {
-                    printf(" [E]"); // 장착된 방어구 표시
+            printf("  %s (Qty: %d) [HP: %d Int: %d]", armors[i].name, armors[i].quantity, armors[i].effect.health, armors[i].effect.intelligence);
+            if (state) {
+                for (int j = 0; j < state->equippedArmorCount; j++) {
+                    if (state->equippedArmors[j] == i) {
+                        printf(" [E]");
+                    }
                 }
             }
             printf("\n");
         }
 
-        // 방향키 입력 처리
         if (isKeyPressed(KEY_UP)) {
             selectedItem = (selectedItem - 1 + ARMOR_COUNT) % ARMOR_COUNT;
             Sleep(150);
@@ -154,7 +171,7 @@ void manageArmors(InventoryState* state) {
             selectedItem = (selectedItem + 1) % ARMOR_COUNT;
             Sleep(150);
         } else if (isKeyPressed(KEY_SPACE)) {
-            if (state->equippedArmorCount < MAX_ARMOR_EQUIPPED) { // 방어구 장착
+            if (state && state->equippedArmorCount < MAX_ARMOR_EQUIPPED) {
                 state->equippedArmors[state->equippedArmorCount++] = selectedItem;
                 printf("\nEquipped %s!\n", armors[selectedItem].name);
                 Sleep(1000);
@@ -163,7 +180,7 @@ void manageArmors(InventoryState* state) {
                 Sleep(1000);
             }
         } else if (isKeyPressed(KEY_ESCAPE)) {
-            return; // 돌아가기
+            return;
         }
     }
 }
@@ -177,14 +194,11 @@ void manageConsumables() {
         printf("Consumables Management\n");
         printf("================\n");
 
-        // 소모품 목록 출력
         for (int i = 0; i < CONSUMABLE_COUNT; i++) {
             gotoxy(1, i + 1);
-            printf("  %s (Qty: %d) [Effect: HP+%d Str+%d]\n",
-                   consumables[i].name, consumables[i].quantity, consumables[i].effect.health, consumables[i].effect.strength);
+            printf("  %s (Qty: %d) [Effect: HP+%d Str+%d]\n", consumables[i].name, consumables[i].quantity, consumables[i].effect.health, consumables[i].effect.strength);
         }
 
-        // 방향키 입력 처리
         if (isKeyPressed(KEY_UP)) {
             selectedItem = (selectedItem - 1 + CONSUMABLE_COUNT) % CONSUMABLE_COUNT;
             Sleep(150);
@@ -193,7 +207,7 @@ void manageConsumables() {
             Sleep(150);
         } else if (isKeyPressed(KEY_SPACE)) {
             if (consumables[selectedItem].quantity > 0) {
-                consumables[selectedItem].quantity--; // 소모품 사용
+                consumables[selectedItem].quantity--;
                 printf("\nUsed %s!\n", consumables[selectedItem].name);
                 Sleep(1000);
             } else {
@@ -212,9 +226,8 @@ void manageLoots() {
     printf("Loot Management\n");
     printf("================\n");
 
-    // 전리품 목록 출력
     for (int i = 0; i < LOOT_COUNT; i++) {
-        printf("  %s (Qty: %d) - %s\n", loots[i].name, loots[i].quantity, loots[i].effect);
+        printf("  %s (Qty: %d) - %s\n", loots[i].name, loots[i].quantity, loots[i].description);
     }
 
     printf("\nPress any key to return...");
