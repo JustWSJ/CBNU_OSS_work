@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "console_util.h"
-#include "menu.h"
-#include "dungeon.h"
 #include "key_input.h"
-#include "battle.h"
+#include "menu.h"
 
 int mainMenu(void);
 void InitializeSystem(void);
@@ -17,10 +15,11 @@ int main() {
         showStatusAllocation();
         clearScreen();
 
-        printf("설정한 스탯 저장하고 마을 화면 넘어가기.\nPress Enter.\n");
+        printf("(여기에 테스트 중인 기능 적기).\nPress Enter or Space.\n");
         wait(); // 지우기
-        Dungeon();
-        
+
+        //테스트할 모듈
+
         clearScreen();
         printf("test complete: \n");
     }
