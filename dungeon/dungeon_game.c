@@ -15,14 +15,14 @@ int main() {
     //  select newgame
     if (selectedOption == 1) {
         showStatusAllocation();
-
         clearScreen();
+
         printf("설정한 스탯 저장하고 마을 화면 넘어가기.\nPress Enter.\n");
         wait(); // 지우기
         Dungeon();
+        
         clearScreen();
         printf("test complete: \n");
-
     }
     //  select loadgame
     else if (selectedOption == 2) {
