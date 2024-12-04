@@ -3,7 +3,8 @@
 
 #include "items.h"
 
-#define MAX_ARMOR_EQUIPPED 5 // 최대 장착 가능한 방어구 수
+#define MAX_ITEMS 100         // 인벤토리 최대 크기
+#define MAX_ARMOR_EQUIPPED 5  // 최대 장착 가능한 방어구 수
 
 // 인벤토리 상태 구조체
 typedef struct {
@@ -12,7 +13,19 @@ typedef struct {
     int equippedArmorCount;               // 현재 장착된 방어구의 개수
 } InventoryState;
 
-// 인벤토리 관련 함수 선언
+// 전체 인벤토리 구조체
+typedef struct {
+    Item items[MAX_ITEMS];  // 현재 플레이어가 소유한 아이템 배열
+    int itemCount;          // 현재 아이템 수
+} Inventory;
+
+extern Inventory playerInventory; // 전역 인벤토리 선언
+
+// 새로 추가된 함수 선언
+void initializeInventory();                  // 인벤토리 초기화
+void addItemToInventory(Item newItem);       // 아이템 추가
+
+// 기존 함수 선언
 void showInventory();                      // 인벤토리 메인 메뉴 표시
 void manageEquipment(InventoryState* state); // 장비 관리 메뉴
 void manageWeapons(InventoryState* state);   // 무기 관리 메뉴
