@@ -12,6 +12,7 @@ void InitializeSystem(void);
 int main() {
     InitializeSystem();
     int selectedOption = mainMenu(); // 메인 메뉴 표시 및 선택값 반환
+    //  select newgame
     if (selectedOption == 1) {
         showStatusAllocation();
 
@@ -22,10 +23,14 @@ int main() {
         clearScreen();
         printf("test complete: \n");
 
-    } else if (selectedOption == 2) {
+    }
+    //  select loadgame
+    else if (selectedOption == 2) {
         // Load Game 처리
         printf("Load Game\n");
-    } else if (selectedOption == 3) {
+    }
+    //  select exit
+    else if (selectedOption == 3) {
         exit(0);
     }
     pause;
