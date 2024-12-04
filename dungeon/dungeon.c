@@ -81,7 +81,7 @@ void DungeonAdventure(int floor) {
 
     // 이미 저장된 맵이 있는지 확인
     map = LoadFromFile(filename_arr1, size); // arr1 불러오기
-    map_fac = LoadFromFile(filename_arr2, size); // arr2 불러오기
+    //map_fac = LoadFromFile(filename_arr2, size); // arr2 불러오기
 
     if (!map) { // 저장된 맵이 없으면 새로 생성
         map = CreateDungeon(floor, size); // arr1 생성
