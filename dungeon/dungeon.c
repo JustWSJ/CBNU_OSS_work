@@ -76,8 +76,8 @@ void DungeonAdventure(int floor) {
 
     // 파일 이름 생성
     char filename_arr1[20], filename_arr2[20];
-    sprintf(filename_arr1, "Floor%d", floor);
-    sprintf(filename_arr2, "Floor%dfac", floor);
+    sprintf(filename_arr1, "map\\Floor%d", floor);
+    sprintf(filename_arr2, "map\\Floor%dfac", floor);
 
     // 이미 저장된 맵이 있는지 확인
     map = LoadFromFile(filename_arr1, size); // arr1 불러오기
