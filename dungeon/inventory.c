@@ -4,34 +4,6 @@
 #include "console_util.h"
 #include "key_input.h"
 #include "inventory.h"
-// 전역 인벤토리 초기화
-Inventory playerInventory = { .itemCount = 0 };
-
-// 새로 추가된 함수: 인벤토리 초기화
-void initializeInventory() {
-    playerInventory.itemCount = 0;
-}
-
-// 새로 추가된 함수: 아이템 추가
-void addItemToInventory(Item newItem) {
-    if (playerInventory.itemCount >= MAX_ITEMS) {
-        printf("인벤토리가 가득 찼습니다!\n");
-        return;
-    }
-
-    // 동일한 아이템이 있으면 수량 증가
-    for (int i = 0; i < playerInventory.itemCount; i++) {
-        if (strcmp(playerInventory.items[i].name, newItem.name) == 0) {
-            playerInventory.items[i].quantity += newItem.quantity;
-            printf("%s 수량이 증가했습니다: %d\n", newItem.name, playerInventory.items[i].quantity);
-            return;
-        }
-    }
-
-    // 새로운 아이템 추가
-    playerInventory.items[playerInventory.itemCount++] = newItem;
-    printf("%s을(를) 인벤토리에 추가했습니다.\n", newItem.name);
-}
 
 // 전역 인벤토리 초기화
 Inventory playerInventory = { .itemCount = 0 };
@@ -48,7 +20,6 @@ void addItemToInventory(Item newItem) {
         return;
     }
 
-    // 동일한 아이템 확인
     for (int i = 0; i < playerInventory.itemCount; i++) {
         if (strcmp(playerInventory.items[i].name, newItem.name) == 0) {
             playerInventory.items[i].quantity += newItem.quantity;
@@ -57,7 +28,6 @@ void addItemToInventory(Item newItem) {
         }
     }
 
-    // 새로운 아이템 추가
     playerInventory.items[playerInventory.itemCount++] = newItem;
     printf("%s을(를) 인벤토리에 추가했습니다.\n", newItem.name);
 }
@@ -71,54 +41,56 @@ int navigateMenu(const char* menuItems[], int itemCount) {
         for (int i = 0; i < itemCount; i++) {
             gotoxy(1, i + 1);
             if (i == selected) {
-                SetColor(0x0E); // 노란색 표시
+                SetColor(0x0E);
                 printf("> %s\n", menuItems[i]);
-                SetColor(0x0F); // 기본 색상 복원
-            } else {
+                SetColor(0x0F);
+            }
+            else {
                 printf("  %s\n", menuItems[i]);
             }
         }
 
-        // 방향키 입력 처리
         if (isKeyPressed(KEY_UP)) {
             selected = (selected - 1 + itemCount) % itemCount;
             Sleep(150);
-        } else if (isKeyPressed(KEY_DOWN)) {
+        }
+        else if (isKeyPressed(KEY_DOWN)) {
             selected = (selected + 1) % itemCount;
             Sleep(150);
-        } else if (isKeyPressed(KEY_SPACE)) {
-            return selected; // 선택된 항목 반환
+        }
+        else if (isKeyPressed(KEY_SPACE)) {
+            return selected;
         }
     }
 }
 
 // 인벤토리 메인 메뉴
 void showInventory() {
-    const char* categories[] = {"Equipment", "Consumables", "Loot", "Back"};
+    const char* categories[] = { "Equipment", "Consumables", "Loot", "Back" };
     int selected;
 
     while (1) {
         selected = navigateMenu(categories, 4);
 
         switch (selected) {
-            case 0:
-                manageEquipment(NULL);
-                break;
-            case 1:
-                manageConsumables();
-                break;
-            case 2:
-                manageLoots();
-                break;
-            case 3:
-                return;
+        case 0:
+            manageEquipment(NULL);
+            break;
+        case 1:
+            manageConsumables();
+            break;
+        case 2:
+            manageLoots();
+            break;
+        case 3:
+            return;
         }
     }
 }
 
 // 장비 관리 메뉴
 void manageEquipment(InventoryState* state) {
-    const char* equipmentTypes[] = {"Weapons", "Armor", "Back"};
+    const char* equipmentTypes[] = { "Weapons", "Armor", "Back" };
     int selected;
 
     while (1) {
@@ -126,10 +98,12 @@ void manageEquipment(InventoryState* state) {
 
         if (selected == 0) {
             manageWeapons(state);
-        } else if (selected == 1) {
+        }
+        else if (selected == 1) {
             manageArmors(state);
-        } else if (selected == 2) {
-            return; // 돌아가기
+        }
+        else if (selected == 2) {
+            return;
         }
     }
 }
@@ -155,16 +129,19 @@ void manageWeapons(InventoryState* state) {
         if (isKeyPressed(KEY_UP)) {
             selectedItem = (selectedItem - 1 + WEAPON_COUNT) % WEAPON_COUNT;
             Sleep(150);
-        } else if (isKeyPressed(KEY_DOWN)) {
+        }
+        else if (isKeyPressed(KEY_DOWN)) {
             selectedItem = (selectedItem + 1) % WEAPON_COUNT;
             Sleep(150);
-        } else if (isKeyPressed(KEY_SPACE)) {
+        }
+        else if (isKeyPressed(KEY_SPACE)) {
             if (state) {
                 state->equippedWeaponIndex = selectedItem;
                 printf("\nEquipped %s!\n", weapons[selectedItem].name);
                 Sleep(1000);
             }
-        } else if (isKeyPressed(KEY_ESCAPE)) {
+        }
+        else if (isKeyPressed(KEY_ESCAPE)) {
             return;
         }
     }
@@ -195,19 +172,23 @@ void manageArmors(InventoryState* state) {
         if (isKeyPressed(KEY_UP)) {
             selectedItem = (selectedItem - 1 + ARMOR_COUNT) % ARMOR_COUNT;
             Sleep(150);
-        } else if (isKeyPressed(KEY_DOWN)) {
+        }
+        else if (isKeyPressed(KEY_DOWN)) {
             selectedItem = (selectedItem + 1) % ARMOR_COUNT;
             Sleep(150);
-        } else if (isKeyPressed(KEY_SPACE)) {
+        }
+        else if (isKeyPressed(KEY_SPACE)) {
             if (state && state->equippedArmorCount < MAX_ARMOR_EQUIPPED) {
                 state->equippedArmors[state->equippedArmorCount++] = selectedItem;
                 printf("\nEquipped %s!\n", armors[selectedItem].name);
                 Sleep(1000);
-            } else {
+            }
+            else {
                 printf("\nCannot equip more armor!\n");
                 Sleep(1000);
             }
-        } else if (isKeyPressed(KEY_ESCAPE)) {
+        }
+        else if (isKeyPressed(KEY_ESCAPE)) {
             return;
         }
     }
@@ -230,19 +211,23 @@ void manageConsumables() {
         if (isKeyPressed(KEY_UP)) {
             selectedItem = (selectedItem - 1 + CONSUMABLE_COUNT) % CONSUMABLE_COUNT;
             Sleep(150);
-        } else if (isKeyPressed(KEY_DOWN)) {
+        }
+        else if (isKeyPressed(KEY_DOWN)) {
             selectedItem = (selectedItem + 1) % CONSUMABLE_COUNT;
             Sleep(150);
-        } else if (isKeyPressed(KEY_SPACE)) {
+        }
+        else if (isKeyPressed(KEY_SPACE)) {
             if (consumables[selectedItem].quantity > 0) {
                 consumables[selectedItem].quantity--;
                 printf("\nUsed %s!\n", consumables[selectedItem].name);
                 Sleep(1000);
-            } else {
+            }
+            else {
                 printf("\nOut of stock!\n");
                 Sleep(1000);
             }
-        } else if (isKeyPressed(KEY_ESCAPE)) {
+        }
+        else if (isKeyPressed(KEY_ESCAPE)) {
             return;
         }
     }
@@ -252,12 +237,4 @@ void manageConsumables() {
 void manageLoots() {
     clearScreen();
     printf("Loot Management\n");
-    printf("================\n");
-
-    for (int i = 0; i < LOOT_COUNT; i++) {
-        printf("  %s (Qty: %d) - %s\n", loots[i].name, loots[i].quantity, loots[i].description);
-    }
-
-    printf("\nPress any key to return...");
-    system("pause > nul");
 }
