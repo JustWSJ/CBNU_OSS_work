@@ -34,5 +34,13 @@ Monster* getMonster(int Monster_value) {
         return &M_005;
         case 1001:
         return &M_1001;
+        case 6: 
+        return &M_006;
+        case 7: 
+        return &M_007;
+        case 1002: 
+        return &M_1002;
+        default: 
+        return NULL
     }
 }
