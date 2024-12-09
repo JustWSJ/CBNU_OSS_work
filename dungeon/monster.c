@@ -2,6 +2,13 @@
 #include "Monster.h"
 
 // 일반 몬스터 추가
+Monster M_001 = {"Goblin", 10, 2, 4};
+Monster M_002 = {"Orc", 40, 10, 5};
+Monster M_003 = {"Slime", 90, 2, 10};
+Monster M_004 = {"Skeleton", 60, 1, 20};
+Monster M_005 = {"Bandit", 40, 20, 1};
+Monster M_006 = {"Wolf", 20, 5, 3};
+Monster M_007 = {"Giant Bat", 50, 8, 8};
 Monster M_008 = {"M_008", 70, 15, 10};
 Monster M_009 = {"M_009", 30, 12, 7};
 Monster M_010 = {"M_010", 55, 18, 5};
@@ -12,6 +19,8 @@ Monster M_014 = {"M_014", 75, 22, 10};
 Monster M_015 = {"M_015", 60, 15, 20};
 
 // 보스 몬스터 추가
+Monster M_1001 = {"Dark Lord", 500, 80, 30};
+Monster M_1002 = {"Fire Dragon", 600, 100, 40};
 Monster M_1003 = {"M_1003", 700, 120, 50};
 Monster M_1004 = {"M_1004", 800, 150, 60};
 Monster M_1005 = {"M_1005", 900, 180, 70};
