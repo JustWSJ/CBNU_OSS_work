@@ -2,8 +2,11 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <string.h>
 
 #include "character.h"
+
+#include "saveLoad.h"
 
 void saveStatus(Character* player) {
     // 상대 경로로 지정된 저장 폴더와 파일 이름
@@ -63,5 +66,68 @@ void loadStatus(Character* player) {
         return;
     }
 
+    
+
     fclose(file); // 파일 닫기
+}
+
+
+// 인벤토리 저장
+void saveInventory(const char* filename) {
+    FILE* file = fopen(filename, "w");
+    if (!file) {
+        printf("인벤토리를 저장할 수 없습니다: %s\n", filename);
+        return;
+    }
+
+    fprintf(file, "ItemCount: %d\n", playerInventory.itemCount);
+
+    for (int i = 0; i < playerInventory.itemCount; i++) {
+        Item item = playerInventory.items[i];
+        fprintf(file, "\"%s\" %d %d %d %d %d %d %d %d \"%s\"\n",
+                item.name, item.type, item.quantity,
+                item.effect.health, item.effect.strength, item.effect.agility,
+                item.effect.intelligence, item.effect.sensory, item.effect.luck,
+                item.description);
+    }
+
+    fclose(file);
+    printf("인벤토리가 저장되었습니다: %s\n", filename);
+}
+
+// 인벤토리 로드
+void loadInventory(const char* filename) {
+    FILE* file = fopen(filename, "r");
+    if (!file) {
+        printf("저장된 인벤토리를 불러올 수 없습니다: %s\n", filename);
+        return;
+    }
+
+    initializeInventory();
+
+    int itemCount;
+    if (fscanf(file, "ItemCount: %d\n", &itemCount) != 1 || itemCount < 0 || itemCount > MAX_ITEMS) {
+        printf("잘못된 파일 형식 또는 아이템 개수 초과: %s\n", filename);
+        fclose(file);
+        return;
+    }
+
+    for (int i = 0; i < itemCount; i++) {
+        Item item;
+
+        if (fscanf(file, "\"%49[^\"]\" %d %d %d %d %d %d %d %d \"%99[^\"]\"\n",
+                   item.name, &item.type, &item.quantity,
+                   &item.effect.health, &item.effect.strength, &item.effect.agility,
+                   &item.effect.intelligence, &item.effect.sensory, &item.effect.luck,
+                   item.description) != 10) {
+            printf("파일 읽기 오류 또는 잘못된 데이터 형식.\n");
+            fclose(file);
+            return;
+        }
+
+        addItemToInventory(item);
+    }
+
+    fclose(file);
+    printf("인벤토리가 불러와졌습니다: %s\n", filename);
 }
