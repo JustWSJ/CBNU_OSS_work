@@ -2,6 +2,7 @@
 #define DROP_TABLE_H
 
 #include "items.h"
+#include "inventory.h"
 
 // 드롭 테이블 항목 구조체
 typedef struct {
@@ -12,5 +13,8 @@ typedef struct {
 
 // 드롭 테이블 반환 함수
 const DropTable* getDropTable(int monsterID, int* count);
+
+// 드롭 아이템 처리 함수
+void dropItem(int monsterID);
 
 #endif

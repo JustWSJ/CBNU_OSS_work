@@ -1,4 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "drop_table.h"
+#include "inventory.h"
 
 // 드롭 테이블 데이터
 static DropTable dropTable[] = {
@@ -20,4 +24,20 @@ const DropTable* getDropTable(int monsterID, int* count) {
     }
     *count = index; // 해당 몬스터의 드롭 아이템 개수
     return result;
+}
+
+// 드롭 아이템 처리
+void dropItem(int monsterID) {
+    int dropCount = 0;
+    const DropTable* drops = getDropTable(monsterID, &dropCount);
+
+    for (int i = 0; i < dropCount; i++) {
+        int randomValue = rand() % 100; // 난수 생성
+
+        if (randomValue < drops[i].dropRate) {
+            // 드롭 성공: 아이템 획득
+            printf("축하합니다! %s을(를) 획득했습니다!\n", drops[i].dropItem.name);
+            addItemToInventory(drops[i].dropItem);
+        }
+    }
 }
