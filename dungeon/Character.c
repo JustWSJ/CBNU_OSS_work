@@ -3,7 +3,7 @@
 #include "character.h"
 
 // 캐릭터 데이터 정의
-Character player = {"Crowler", 100, 5, 5, 5, 5, 5, 0};
+Character player = {"Crowler", 100, 5, 5, 5, 5, 5, -1};
 
 // Getter 함수
 Character* getPlayer() {
