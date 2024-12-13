@@ -56,9 +56,9 @@ void useItem(Character *player) {
     manageConsumables(); // 인벤토리에서 소모품 관리 및 사용
 
     // 소모품 사용 후 최대 체력 초과 방지
-    if (player->health > player->maxHealth) {
-        player->health = player->maxHealth;
-        printf("체력이 최대 체력을 초과하여 %d로 조정되었습니다.\n", player->maxHealth);
+    if (player->health > player->max_Health) {
+        player->health = player->max_Health;
+        printf("체력이 최대 체력을 초과하여 %d로 조정되었습니다.\n", player->max_Health);
     }
 }
 
@@ -66,7 +66,7 @@ void useItem(Character *player) {
 void displayStats(Character *character) {
     printf("\n%s의 상태:\n", character->name);
     printf("Health: %d/%d, Strength: %d, Agility: %d, Intelligence: %d, Sensory: %d, Luck: %d\n",
-           character->health, character->maxHealth, character->strength, character->agility,
+           character->health, character->max_Health, character->strength, character->agility,
            character->intelligence, character->sensory, character->luck);
 }
 
