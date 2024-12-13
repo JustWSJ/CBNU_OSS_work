@@ -5,6 +5,7 @@
 #include "dungeon.h"
 #include "key_input.h"
 #include "battle.h"
+#include "hotel.h"
 
 int mainMenu(void);
 void InitializeSystem(void);
