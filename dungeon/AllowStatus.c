@@ -15,6 +15,7 @@ void updateStat(Character *player, int statID, int delta) {
         case 3: player->intelligence += delta; break;
         case 4: player->sensory += delta; break;
         case 5: player->luck += delta; break;
+        case 6: player->max_health = player->health * 20; break;
     }
 }
 
@@ -27,13 +28,13 @@ int getStatValue(Character *player, int statID) {
         case 3: return player->intelligence;
         case 4: return player->sensory;
         case 5: return player->luck;
+        case 6: return player->max_health;
         default: return 0;
     }
 }
 
 // 스탯 배분 함수
-void showStatusAllocation() {
-    Character *player = getPlayer(); // 전역 플레이어 데이터 가져오기
+void showStatusAllocation(Character *player) {
     int points = 15;                 // 배분 가능한 포인트
     int selectedStat = 0;            // 현재 선택된 스탯 (0: Health, ..., 5: Luck)
     int updated = 1;                 // 화면 갱신 여부
@@ -75,8 +76,11 @@ void showStatusAllocation() {
             Sleep(150);
         }
         if (isKeyPressed(KEY_LEFT)) {
-            if (getStatValue(player, selectedStat) > 1) {
+            if (getStatValue(player, selectedStat) > 5) { // 최소값 5로 제한
                 updateStat(player, selectedStat, -1); // 스탯 감소
+                if (selectedStat == 0) { // Health 감소 시 max_health 업데이트
+                    player->max_health = getStatValue(player, selectedStat) * 20;
+                }
                 points++;
                 updated = 1;
             }
@@ -85,6 +89,9 @@ void showStatusAllocation() {
         if (isKeyPressed(KEY_RIGHT)) {
             if (points > 0) {
                 updateStat(player, selectedStat, 1); // 스탯 증가
+                if (selectedStat == 0) { // Health 증가 시 max_health 업데이트
+                    player->max_health = getStatValue(player, selectedStat) * 20;
+                }
                 points--;
                 updated = 1;
             }
