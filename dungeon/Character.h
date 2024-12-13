@@ -12,6 +12,9 @@ typedef struct {
     int intelligence;   //  ?
     int sensory;        //  치명타 확률 증가
     int luck;           //  치명타 확률, 기타 긍정 랜덤 이벤트 증가
+
+    int max_health;     //  최대체력 = health * 20;
+
     int Maxfloor;       //  최대 도달 계층
 } Character;
 
