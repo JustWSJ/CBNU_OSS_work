@@ -5,7 +5,6 @@
 #include "dungeon.h"
 #include "key_input.h"
 #include "battle.h"
-#include "Character.h"
 
 int mainMenu(void);
 void InitializeSystem(void);
@@ -15,9 +14,7 @@ int main() {
     int selectedOption = mainMenu(); // 메인 메뉴 표시 및 선택값 반환
     //  select newgame
     if (selectedOption == 1) {
-
-        //  캐릭터 스테이터스 분배
-        showStatusAllocation(getPlayer());
+        showStatusAllocation();
         clearScreen();
 
         printf("설정한 스탯 저장하고 마을 화면 넘어가기.\nPress Enter.\n");
