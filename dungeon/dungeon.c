@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "Character.h"
 #include "console_util.h"
 #include "key_input.h"
 #include "dungeon.h"
+#include "saveLoad.h"
 
 #define INDENT 1
 #define GAP 1
@@ -72,7 +74,10 @@ void deleteDungeonFiles2(int floor) {
 
 // 던전 탐사
 void Dungeon() {
-    int floor = SelectFloor(10);
+    Character *player = getPlayer();
+    loadStatus(player);
+    int floor = SelectFloor(player->Maxfloor);
+
     int option = DungeonEntrance(floor);
     while (1) {
         if (option == 0) {
@@ -105,8 +110,8 @@ void DungeonAdventure(int floor) {
 
     // 파일 이름 생성
     char filename_arr1[20], filename_arr2[20];
-    sprintf(filename_arr1, "map\\Floor%d", floor);
-    sprintf(filename_arr2, "map\\Floor%dfac", floor);
+    sprintf(filename_arr1, "map/Floor%d", floor);
+    sprintf(filename_arr2, "map/Floor%dfac", floor);
 
     // 이미 저장된 맵이 있는지 확인
     map = LoadFromFile(filename_arr1, size); // arr1 불러오기
@@ -155,7 +160,7 @@ int SelectFloor(int MENU_COUNT) {
     printf("던전 입구 선택");
     while (1) {
         if (updated) {
-            for (int i = 0; i < MENU_COUNT; i++) {
+            for (int i = 0; i <= MENU_COUNT; i++) {
                 gotoxy(INDENT, GAP + i);
                 if (i == selected) {
                     SetColor(0x0E);
@@ -240,9 +245,9 @@ int DungeonSize(int floor) {
         return -2;
     } else if (floor / 10 < 1) {
         return 7;
-    } else {
+    } else if (floor > 90) {
         return 17;
-    }
+    } else return 11;
 }
 
 char** CreateDungeon(int floor, int size) {
@@ -344,14 +349,14 @@ void MoveDungeon(char **map, char **map_fac, int size) {
         if (P_Event) {
             if (P_Event == 4) { // 출구 이벤트
                 gotoxy(1, size + 2);
-                printf("You found the exit!     ");
+                printf("You found the exit!      ");
                 gotoxy(1, size + 3);
-                printf("Exiting floor...▼       \n");
+                printf("Exiting floor...▼        \n");
                 wait();
                 return; // 던전 탐험 종료
             } else {
                 gotoxy(1, size + 2);
-                printf("Processing event: %c... \n", map_fac[locv][loch]);
+                printf("Processing event: %c...  \n", map_fac[locv][loch]);
                 map_fac[locv][loch] = 'R'; // 이벤트 완료 후 기본 길로 변경
             }
         }
@@ -426,11 +431,11 @@ void MoveDungeon(char **map, char **map_fac, int size) {
         if (isKeyPressed(KEY_ENTER) || isKeyPressed(KEY_SPACE)) {
             if (map_fac[locv][loch] != 'R') { // 현재 위치가 탐사 가능한 이벤트라면
                 gotoxy(1, size + 2);
-                printf("Exploring: %c...        \n", map_fac[locv][loch]);
+                printf("Exploring: %c...         \n", map_fac[locv][loch]);
                 map_fac[locv][loch] = 'R'; // 탐사 완료 후 기본 길로 변경
             } else {
                 gotoxy(1, size + 2);
-                printf("Nothing to explore here.\n");
+                printf("Nothing to explore here. \n");
             }
             Sleep(190);
         }
