@@ -1,25 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "Character.h"
 #include "console_util.h"
 #include "menu.h"
-#include "dungeon.h"
+//#include "dungeon.h"
 #include "key_input.h"
-#include "battle.h"
+//#include "battle.h"
 
 int mainMenu(void);
 void InitializeSystem(void);
 
 int main() {
     InitializeSystem();
+    Character *player = getPlayer();
     int selectedOption = mainMenu(); // 메인 메뉴 표시 및 선택값 반환
     //  select newgame
     if (selectedOption == 1) {
         showStatusAllocation();
         clearScreen();
 
-        printf("설정한 스탯 저장하고 마을 화면 넘어가기.\nPress Enter.\n");
+        printf("%d %d %d %d %d %d\n", player->health, player->strength, player->agility, player->intelligence, player->sensory, player->luck);
+        printf("설정한 스탯 저장하고 마을 화면 넘어가기.\nPress Enter.\n"); //여기가 while문 0층이 되어야함.
         wait(); // 지우기
-        Dungeon();
+        //Dungeon();
         
         clearScreen();
         printf("test complete: \n");
