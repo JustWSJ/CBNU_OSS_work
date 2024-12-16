@@ -4,8 +4,8 @@
 #include <sys/types.h>
 #include <string.h>
 
-#include "character.h"
-
+#include "Character.h"
+#include "inventory.h"
 #include "saveLoad.h"
 
 void saveStatus(Character* player) {
@@ -16,7 +16,7 @@ void saveStatus(Character* player) {
     // 디렉터리 생성 (이미 존재하면 무시)
     struct stat st = {0};
     if (stat(folder, &st) == -1) {
-        if (mkdir(folder, 0700) != 0) {
+        if (mkdir(folder) != 0) { //mkdir(folder, 0700)이었는데 too many argu가 뜸
             printf("디렉터리를 생성할 수 없습니다: %s\n", folder);
             return;
         }
@@ -42,7 +42,7 @@ void saveStatus(Character* player) {
     printf("저장 완료: %s\n", filename);
 }
 
-void loadStatus(Character* player) {
+int loadStatus(Character* player) {
     // 저장된 파일 경로
     char *filename = "save/save_000.txt";
     
@@ -50,7 +50,7 @@ void loadStatus(Character* player) {
     FILE *file = fopen(filename, "r");
     if (!file) {
         printf("파일을 열 수 없습니다: %s\n", filename);
-        return;
+        return -1;
     }
 
     // 파일에서 데이터 읽기
@@ -63,7 +63,7 @@ void loadStatus(Character* player) {
         fscanf(file, "Maxfloor: %d", &player->Maxfloor) != 1) {
         printf("파일 형식이 잘못되었습니다: %s\n", filename);
         fclose(file);
-        return;
+        return 1;
     }
 
     

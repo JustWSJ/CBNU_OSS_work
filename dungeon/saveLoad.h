@@ -5,7 +5,7 @@
 #include "inventory.h"
 
 void saveStatus(Character* player);
-void loadStatus(Character* player);
+int loadStatus(Character* player);
 
 // 인벤토리 저장/로드
 void saveInventory(const char* filename);
