@@ -3,6 +3,7 @@
 #include "Character.h"
 #include "console_util.h"
 #include "menu.h"
+#include "saveLoad.h"
 //#include "dungeon.h"
 #include "key_input.h"
 //#include "battle.h"
@@ -19,23 +20,36 @@ int main() {
         showStatusAllocation();
         clearScreen();
 
-        printf("%d %d %d %d %d %d\n", player->health, player->strength, player->agility, player->intelligence, player->sensory, player->luck);
-        printf("설정한 스탯 저장하고 마을 화면 넘어가기.\nPress Enter.\n"); //여기가 while문 0층이 되어야함.
-        wait(); // 지우기
-        //Dungeon();
-        
-        clearScreen();
-        printf("test complete: \n");
+        //printf("%d %d %d %d %d %d\n", player->health, player->strength, player->agility, player->intelligence, player->sensory, player->luck);
+        saveStatus(player);
     }
     //  select loadgame
     else if (selectedOption == 2) {
         // Load Game 처리
-        printf("Load Game\n");
+        printf("\n\nLoading Game...\n");
+        wait(); // 지우기
+        if (loadStatus(player) != -1){
+            printf("%d %d %d %d %d %d\n", player->health, player->strength, player->agility, player->intelligence, player->sensory, player->luck);
+        } else {
+            printf("cat find savefile.\nstart new game.\n");
+            wait();
+            showStatusAllocation();
+            saveStatus(player);
+            clearScreen();
+        }
+        
     }
     //  select exit
     else if (selectedOption == 3) {
         exit(0);
     }
+    printf("설정한 스탯 저장하고 마을 화면 넘어가기.\nPress Enter.\n"); //여기가 while문 0층이 되어야함.
+    wait(); // 지우기
+    //Dungeon();
+        
+    clearScreen();
+    printf("test complete: \n");
+
     pause;
     return 0;
 }
