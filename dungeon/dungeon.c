@@ -13,16 +13,20 @@
 void SaveToFile(const char* filename, char** map, int size) {
     FILE* file = fopen(filename, "w");
     if (!file) {
+        gotoxy(0,49);
         printf("파일 저장에 실패했습니다: %s\n", filename);
         return;
     }
+    
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             fprintf(file, "%c", map[i][j]);
         }
         fprintf(file, "\n");
     }
+
     fclose(file);
+    return;
 }
 
 // 파일에서 맵을 불러오는 함수
@@ -43,6 +47,29 @@ char** LoadFromFile(const char* filename, int size) {
     return map;
 }
 
+void deleteDungeonFiles1(int floor) {
+    char filename_arr1[20];
+    // 파일 이름 생성
+    sprintf(filename_arr1, "map/Floor%d", floor);
+    // arr1 파일 삭제
+    if (remove(filename_arr1) == 0) {
+        ;
+    } else {
+        ;
+    }
+}
+void deleteDungeonFiles2(int floor) {
+    char filename_arr2[20];
+    // 파일 이름 생성
+    sprintf(filename_arr2, "map/Floor%dfac", floor);
+    // arr1 파일 삭제
+    if (remove(filename_arr2) == 0) {
+        ;
+    } else {
+        ;
+    }
+}
+
 // 던전 탐사
 void Dungeon() {
     int floor = SelectFloor(10);
@@ -57,7 +84,9 @@ void Dungeon() {
                 wait();
                 exit(0);
             } else if (isClear(floor)) option = DungeonEntrance(floor);
-            else DungeonAdventure(floor);
+            else {
+                DungeonAdventure(floor);
+            }
         } else {
             clearScreen();
             printf("마을로 돌아갑니다.\n");
@@ -85,11 +114,11 @@ void DungeonAdventure(int floor) {
 
     if (!map) { // 저장된 맵이 없으면 새로 생성
         map = CreateDungeon(floor, size); // arr1 생성
-        map_fac = allocationfactor(floor, size); // arr2 생성
-
         SaveToFile(filename_arr1, map, size);      // arr1 저장
-        SaveToFile(filename_arr2, map_fac, size); // arr2 저장
     }
+    deleteDungeonFiles2(floor);
+    map_fac = allocationfactor(floor, size, map); // arr2 생성
+    SaveToFile(filename_arr2, map_fac, size); // arr2 저장
     //draw Map
     printf(" 던전 %d층: %dx%d  이동: 방향키, 탐사: ENTER/SPACE", floor, size - 2, size - 2);
     for (int i = 0; i < size; i++) {
@@ -102,6 +131,8 @@ void DungeonAdventure(int floor) {
     printf("●");
     // 탐사 시작
     MoveDungeon(map, map_fac, size);
+    SaveToFile(filename_arr1, map, size);
+    deleteDungeonFiles2(floor);
 
     // 메모리 해제
     for (int i = 0; i < size; i++) {
@@ -214,59 +245,65 @@ int DungeonSize(int floor) {
     }
 }
 
-// 던전 생성
 char** CreateDungeon(int floor, int size) {
-    if (size == -1 || size == -2) {
-        return NULL;
-    }
-
     char** dungeon = (char**)malloc(size * sizeof(char*));
     for (int i = 0; i < size; i++) {
         dungeon[i] = (char*)malloc(size * sizeof(char));
         for (int j = 0; j < size; j++) {
             if (i == 0 || i == size - 1 || j == 0 || j == size - 1) {
-                dungeon[i][j] = 'W';
+                dungeon[i][j] = 'W'; // 테두리 벽
+            } else if (rand() % 5 == 0) { // 내부에 중간 벽 'w' 랜덤 배치
+                dungeon[i][j] = 'w';
             } else {
-                dungeon[i][j] = 'R';
+                dungeon[i][j] = 'R'; // 기본 길
             }
         }
     }
-
-    //dungeon[0][size / 2] = 'E';
+    dungeon[1][size / 2] = 'R';
     return dungeon;
 }
 
-// 이벤트 배열 생성
-char** allocationfactor(int floor, int size) {
+char** allocationfactor(int floor, int size, char** map) {
     char** map_fac = (char**)malloc(size * sizeof(char*));
     for (int i = 0; i < size; i++) {
-        map_fac[i] = (char*)malloc(size * sizeof(char));
-        for (int j = 0; j < size; j++) {
-            map_fac[i][j] = 'R'; // 기본적으로 길로 채움
-        }
+        map_fac[i] = (char*)malloc(size * sizeof(char)); // 각 행에 메모리 할당
     }
 
-    // 난이도 조절을 위한 요소 수 계산
-    int num_battle = floor / 10 + 2; // B 요소 개수 (최소 2개, 층수 증가마다 추가)
-    int num_force = floor / 15 + 1; // F 요소 개수 (최소 1개, 층수 증가마다 추가)
-    int num_inventory = floor / 20 + 1; // I 요소 개수 (최소 1개, 층수 증가마다 추가)
-    int num_search = floor / 10 + 3; // S 요소 개수 (최소 3개, 층수 증가마다 추가)
-    int num_wall = floor / 8 + 3; // w 요소 개수 (최소 3개, 층수 증가마다 추가)
-    int num_exit = 1; // X 요소는 항상 1개
+    int startX = 0, startY = size / 2; // 입구 위치
+    int exitX  = rand() % (size - 2) + 1, exitY = rand() % (size - 2) + 1; // 출구 랜덤 위치
+    
 
-    // 요소 배치
-    srand((unsigned)time(NULL)); // 랜덤 시드 설정
+    int validPath = 0; // 경로 유효성 플래그
+    while (!validPath) {
+        // 요소 초기화
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                map_fac[i][j] = 'R'; // 기본 길
+            }
+        }
 
-    place_element('B', num_battle, size, map_fac);     // 강제 전투
-    place_element('F', num_force, size, map_fac);     // 강제 이벤트
-    place_element('I', num_inventory, size, map_fac); // 수색 후 아이템
-    place_element('S', num_search, size, map_fac);    // 수색 후 전투
-    place_element('w', num_wall, size, map_fac);      // 미로 중간의 벽
-    place_element('X', num_exit, size, map_fac);      // 출구 (항상 1개)
+        // 입구와 출구 배치
+        exitX  = rand() % (size - 2) + 1;
+        exitY = rand() % (size - 2) + 1;
+        while (map[exitX][exitY] == 'w' || map[exitX][exitY] == 'W') {
+            exitX = rand() % (size - 2) + 1;
+            exitY = rand() % (size - 2) + 1;
+        }
+        map_fac[startX][startY] = 'E'; // 입구
+        map_fac[exitX][exitY] = 'X';   // 출구
+
+        // 랜덤 요소 배치
+        place_element('B', floor / 10 + 2, size, map_fac); // 전투 요소
+        place_element('F', floor / 15 + 1, size, map_fac); // 강제 이벤트
+        place_element('I', floor / 20 + 1, size, map_fac); // 아이템 수색
+        place_element('S', floor / 10 + 3, size, map_fac); // 수색 후 전투
+
+        // 경로 유효성 검사
+        validPath = isValidPath(map_fac, size, startX, startY, exitX, exitY);
+    }
 
     return map_fac;
 }
-
 // 요소를 랜덤하게 배치
 void place_element(char element, int count, int size, char **map_fac) {
     while (count > 0) {
@@ -280,83 +317,158 @@ void place_element(char element, int count, int size, char **map_fac) {
 }
 
 // 플레이어 이동
-void MoveDungeon(char **map, char **map_fac, int size){
-    int locv, loch;
-    locv = 0;
-    loch = size/2;
-    waitKeyDown();
-    gotoxy((loch*2) + INDENT, locv + GAP);
-    printf("□");
-    gotoxy((loch*2) + INDENT, (++locv) + GAP);
-    printf("●");
-    Sleep(150);
-    //여기서부터 반복에, 강제이벤트/보스 체크 후 아니면 이벤트 진행 확인 및 무빙(벽 확인)
+void MoveDungeon(char **map, char **map_fac, int size) {
+    int locv = 0;                 // 플레이어의 현재 세로 위치 (행)
+    int loch = size / 2;          // 플레이어의 현재 가로 위치 (열)
+
+    // 초기 위치 출력
+    draw_loc(locv, loch);
+
+    // **6. 최초 이동 시작 조건 처리**
     while(1){
-        int P_Event = check_P_Event(map_fac[locv][loch]);
-        if (P_Event) {
-            if (map_fac[locv][loch] == 'X') {
-                gotoxy(40,1);
-                printf("%c scaned.", map_fac[locv][loch]); //테스트용
-                wait();
-                break;
-            } else {
-                gotoxy(40,1); //테스트용
-                printf("%c scaned.", map_fac[locv][loch]); // 테스트용
-                //콜이벤트(char);
-                map_fac[locv][loch] = 'R';
-            }
-        }
-        while(map_fac[locv][loch] == 'R' || map_fac[locv][loch] == 'S'|| map_fac[locv][loch] == 'I'){
-            if (isKeyPressed(KEY_ENTER) || isKeyPressed(KEY_SPACE)) {
-                //R이면 뭐 없음
-                if (map_fac[locv][loch]=='R') {
-                    gotoxy(40,1);
-                    printf("%c scaned.", map_fac[locv][loch]); //테스트용
-                } else if (map_fac[locv][loch] == 'S') {
-                    //S이면 전투
-                    gotoxy(40,1);
-                    printf("%c scaned.", map_fac[locv][loch]); //테스트용
-                    map_fac[locv][loch] = 'R';
-                } else if (map_fac[locv][loch] == 'I') {
-                    //I이면 랜덤 이벤트
-                    gotoxy(40,1);
-                    printf("%c scaned.", map_fac[locv][loch]); //테스트용
-                    map_fac[locv][loch] = 'R';
-                }
-                Sleep(150);
-            }
-            // 이동위치한 곳 벽인지 확인 후 브레이크! 
-            if (isKeyPressed(KEY_UP) && locv - 1 > 0 && !check_W(map[locv - 1][loch]) && !check_w(map_fac[locv - 1][loch])) {
+        if (isKeyPressed(KEY_DOWN) && locv + 1 < size - 1) { // 최초로 아래 방향 이동을 요구
+            int next_locv = locv + 1;
+            if (map[next_locv][loch] != 'W' && map[next_locv][loch] != 'w') {
                 Erase_loc(locv, loch);
-                locv--;
+                locv = next_locv;
                 draw_loc(locv, loch);
                 Sleep(150);
-                break;
-            }
-            if (isKeyPressed(KEY_DOWN) && locv + 1 < size - 1 && !check_W(map[locv + 1][loch])&& !check_w(map_fac[locv + 1][loch])){
-                Erase_loc(locv, loch);
-                locv++;
-                draw_loc(locv, loch);
-                Sleep(150);
-                break;
-            }
-            if (isKeyPressed(KEY_LEFT) && loch - 1 > 0 && !check_W(map[locv][loch - 1])&& !check_w(map_fac[locv][loch - 1])){
-                Erase_loc(locv, loch);
-                loch--;
-                draw_loc(locv, loch);
-                Sleep(150);
-                break;
-            }
-            if (isKeyPressed(KEY_RIGHT) && loch + 1 < size - 1 && !check_W(map[locv][loch + 1])&& !check_w(map_fac[locv][loch + 1])){
-                Erase_loc(locv, loch);
-                loch++;
-                draw_loc(locv, loch);
-                Sleep(150);
-                break;
+                break; // 아래로 이동 후 게임 진행
             }
         }
     }
-    return;
+
+    while (1) {
+        // **1. 현재 위치 이벤트 확인**
+        int P_Event = check_P_Event(map_fac[locv][loch]);
+        if (P_Event) {
+            if (P_Event == 4) { // 출구 이벤트
+                gotoxy(1, size + 2);
+                printf("You found the exit!     ");
+                gotoxy(1, size + 3);
+                printf("Exiting floor...▼       \n");
+                wait();
+                return; // 던전 탐험 종료
+            } else {
+                gotoxy(1, size + 2);
+                printf("Processing event: %c... \n", map_fac[locv][loch]);
+                map_fac[locv][loch] = 'R'; // 이벤트 완료 후 기본 길로 변경
+            }
+        }
+
+        // 이동 키 입력 처리
+        if (isKeyPressed(KEY_UP)) { // 위쪽 키 입력
+            int next_locv = locv - 1;
+            int next_loch = loch;
+            if (next_locv > 0 && map[next_locv][next_loch] != 'W' && map[next_locv][next_loch] != 'w') {
+                Erase_loc(locv, loch);
+                locv = next_locv;
+                draw_loc(locv, loch);
+                Sleep(150);
+            } else if (map[next_locv][next_loch] == 'w') {
+                map[next_locv][next_loch] = 'W';
+                gotoxy((next_loch * 2) + INDENT, next_locv + GAP);
+                printf("□");
+                Sleep(150);
+            }
+        }
+
+        if (isKeyPressed(KEY_DOWN)) { // 아래쪽 키 입력
+            int next_locv = locv + 1;
+            int next_loch = loch;
+            if (next_locv < size - 1 && map[next_locv][next_loch] != 'W' && map[next_locv][next_loch] != 'w') {
+                Erase_loc(locv, loch);
+                locv = next_locv;
+                draw_loc(locv, loch);
+                Sleep(150);
+            } else if (map[next_locv][next_loch] == 'w') {
+                map[next_locv][next_loch] = 'W';
+                gotoxy((next_loch * 2) + INDENT, next_locv + GAP);
+                printf("□");
+                Sleep(150);
+            }
+        }
+
+        if (isKeyPressed(KEY_LEFT)) { // 왼쪽 키 입력
+            int next_locv = locv;
+            int next_loch = loch - 1;
+            if (next_loch > 0 && map[next_locv][next_loch] != 'W' && map[next_locv][next_loch] != 'w') {
+                Erase_loc(locv, loch);
+                loch = next_loch;
+                draw_loc(locv, loch);
+                Sleep(150);
+            } else if (map[next_locv][next_loch] == 'w') {
+                map[next_locv][next_loch] = 'W';
+                gotoxy((next_loch * 2) + INDENT, next_locv + GAP);
+                printf("□");
+                Sleep(150);
+            }
+        }
+
+        if (isKeyPressed(KEY_RIGHT)) { // 오른쪽 키 입력
+            int next_locv = locv;
+            int next_loch = loch + 1;
+            if (next_loch < size - 1 && map[next_locv][next_loch] != 'W' && map[next_locv][next_loch] != 'w') {
+                Erase_loc(locv, loch);
+                loch = next_loch;
+                draw_loc(locv, loch);
+                Sleep(150);
+            } else if (map[next_locv][next_loch] == 'w') {
+                map[next_locv][next_loch] = 'W';
+                gotoxy((next_loch * 2) + INDENT, next_locv + GAP);
+                printf("□");
+                Sleep(150);
+            }
+        }
+
+
+        // **5. 탐사 키 입력 처리**
+        if (isKeyPressed(KEY_ENTER) || isKeyPressed(KEY_SPACE)) {
+            if (map_fac[locv][loch] != 'R') { // 현재 위치가 탐사 가능한 이벤트라면
+                gotoxy(1, size + 2);
+                printf("Exploring: %c...        \n", map_fac[locv][loch]);
+                map_fac[locv][loch] = 'R'; // 탐사 완료 후 기본 길로 변경
+            } else {
+                gotoxy(1, size + 2);
+                printf("Nothing to explore here.\n");
+            }
+            Sleep(190);
+        }
+    }
+}
+
+int isValidPath(char **map, int size, int startX, int startY, int exitX, int exitY) {
+    int visited[size][size];
+    memset(visited, 0, sizeof(visited));
+
+    int dx[] = {0, 0, -1, 1};
+    int dy[] = {-1, 1, 0, 0};
+
+    int stackX[size * size], stackY[size * size];
+    int top = -1;
+    stackX[++top] = startX;
+    stackY[top] = startY;
+
+    while (top >= 0) {
+        int x = stackX[top];
+        int y = stackY[top--];
+
+        if (x == exitX && y == exitY) return 1;
+
+        if (visited[x][y]) continue;
+        visited[x][y] = 1;
+
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            if (nx >= 0 && nx < size && ny >= 0 && ny < size &&
+                !visited[nx][ny] && map[nx][ny] != 'W' && map[nx][ny] != 'w') {
+                stackX[++top] = nx;
+                stackY[top] = ny;
+            }
+        }
+    }
+    return 0; // 경로 없음
 }
 
 int check_P_Event(char c){
