@@ -1,1 +1,1 @@
-Health: 12Strength: 10Agility: 8Intelligence: 6Sensory: 4Luck: 5Maxfloor: -1
+Health: 4Strength: 4Agility: 10Intelligence: 17Sensory: 5Luck: 5Maxfloor: -1
