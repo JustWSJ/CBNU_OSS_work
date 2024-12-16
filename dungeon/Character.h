@@ -21,6 +21,6 @@ typedef struct {
 // Getter/Setter 함수 선언
 Character* getPlayer();
 void setPlayer(Character newPlayer);
-void updatePlayerStat(const char* stat, int value);
+void updatePlayerStat(const int stat, int value);
 
 #endif // CHARACTER_H

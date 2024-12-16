@@ -16,20 +16,20 @@ void setPlayer(Character newPlayer) {
 }
 
 // 특정 속성 업데이트 함수
-void updatePlayerStat(const char* stat, int value) {
-    if (strcmp(stat, "health") == 0) {
+void updatePlayerStat(const int stat, int value) {
+    if (stat == 0) {
         player.health = value;
-    } else if (strcmp(stat, "strength") == 0) {
+    } else if (stat == 1) {
         player.strength = value;
-    } else if (strcmp(stat, "agility") == 0) {
+    } else if (stat == 2) {
         player.agility = value;
-    } else if (strcmp(stat, "intelligence") == 0) {
+    } else if (stat == 3) {
         player.intelligence = value;
-    } else if (strcmp(stat, "sensory") == 0) {
+    } else if (stat == 4) {
         player.sensory = value;
-    } else if (strcmp(stat, "luck") == 0) {
+    } else if (stat == 5) {
         player.luck = value;
     } else {
-        printf("Error: Unknown stat '%s'.\n", stat);
+        printf("Error: Unknown stat.\n");
     }
 }
