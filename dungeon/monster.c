@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "Monster.h"
+#include "monster.h"
 
 // 일반 몬스터 추가
 Monster M_001 = {"Goblin", 10, 2, 4};
