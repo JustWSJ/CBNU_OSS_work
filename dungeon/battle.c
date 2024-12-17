@@ -109,7 +109,8 @@ void battle(Character *player, Monster *enemy) {
     } else if (selected == 1) { // 도망
         if (escape(player, enemy)) return;
     } else if (selected == 2) { // 인벤토리
-        printf("인벤토리 기능은 아직 구현되지 않았습니다.\n");
+        showInventory();  
+        //printf("인벤토리 기능은 아직 구현되지 않았습니다.\n");
     }
 
     // 몬스터의 턴
