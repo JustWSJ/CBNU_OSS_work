@@ -4,6 +4,7 @@
 #include <time.h>
 #include "Character.h"
 #include "console_util.h"
+#include "Event.h"
 #include "key_input.h"
 #include "dungeon.h"
 #include "saveLoad.h"
@@ -371,7 +372,8 @@ void MoveDungeon(char **map, char **map_fac, int size) {
                 return; // 던전 탐험 종료
             } else {
                 gotoxy(1, size + 2);
-                printf("Processing event: %c...  \n", map_fac[locv][loch]);
+                //printf("Processing event: %c...  \n", map_fac[locv][loch]);
+                callEvent(map_fac[locv][loch]);
                 map_fac[locv][loch] = 'R'; // 이벤트 완료 후 기본 길로 변경
             }
         }
@@ -446,7 +448,8 @@ void MoveDungeon(char **map, char **map_fac, int size) {
         if (isKeyPressed(KEY_ENTER) || isKeyPressed(KEY_SPACE)) {
             if (map_fac[locv][loch] != 'R') { // 현재 위치가 탐사 가능한 이벤트라면
                 gotoxy(1, size + 2);
-                printf("Exploring: %c...         \n", map_fac[locv][loch]);
+                //printf("Exploring: %c...         \n", map_fac[locv][loch]);
+                callEvent(map_fac[locv][loch]);
                 map_fac[locv][loch] = 'R'; // 탐사 완료 후 기본 길로 변경
             } else {
                 gotoxy(1, size + 2);
