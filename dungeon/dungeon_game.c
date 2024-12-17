@@ -17,23 +17,26 @@ void StartingOption(int, Character *);
 
 void villageMenu(Character *player) {
     int selected = 0; // 메뉴 선택 초기값
+    int prev_selected = -1; // 이전 선택 상태를 저장
     char* villageOptions[2] = { "1. 호텔 방문", "2. 던전 입장" };
 
     while (1) {
-        // 메뉴 출력
-        gotoxy(0, 20); // 20번째 줄부터 시작
-        printf("==================== 마을 ====================\n");
-        for (int i = 0; i < 2; i++) {
-            gotoxy(2, 22 + i); // 메뉴 위치
-            printf("                                     "); // 기존 글씨 지우기
-            gotoxy(2, 22 + i);
-            if (i == selected) {
-                SetColor(0x0E); // 선택 항목은 노란색
-                printf("> %s", villageOptions[i]);
-                SetColor(0x0F); // 원래 색상
-            } else {
-                printf("  %s", villageOptions[i]);
+        // 메뉴 출력 (이전 상태와 비교해 변경된 부분만 출력)
+        if (selected != prev_selected) { 
+            gotoxy(0, 20); // 20번째 줄부터 시작
+            printf("==================== 마을 ====================\n");
+
+            for (int i = 0; i < 2; i++) {
+                gotoxy(2, 22 + i); // 메뉴 위치
+                if (i == selected) {
+                    SetColor(0x0E); // 선택 항목은 노란색
+                    printf("> %s", villageOptions[i]);
+                    SetColor(0x0F); // 원래 색상
+                } else {
+                    printf("  %s", villageOptions[i]);
+                }
             }
+            prev_selected = selected; // 선택 상태 갱신
         }
 
         // 키 입력 처리
@@ -44,14 +47,15 @@ void villageMenu(Character *player) {
             selected = (selected + 1) % 2; // 아래로 이동
             Sleep(150);
         } else if (isKeyPressed(KEY_ENTER)) {
+            gotoxy(0, 25);
             if (selected == 0) { // 호텔 방문 선택
-                gotoxy(0, 25);
                 printf("호텔을 방문합니다...\n");
                 visitHotel(player); // 호텔 기능 호출
+                Sleep(190);
             } else if (selected == 1) { // 던전 입장 선택
-                gotoxy(0, 25);
                 printf("던전에 입장합니다...\n");
                 Dungeon(); // 던전 입장
+                Sleep(190);
             }
             break; // 메뉴 반복 종료 후 마을 메인으로 돌아감
         }
