@@ -20,16 +20,16 @@ void attackCharacterToMonster(Character *attacker, Monster *defender) {
 
 // 공격 함수 (Monster vs Character)
 void attackMonsterToCharacter(Monster *attacker, Character *defender) {
-    int damage = (attacker->M_atk * 2) - (defender->strength / 2);
+    int damage = (attacker->M_atk * 2) - (defender->health / 2);
     if (damage < 0) damage = 0;
 
     printf("%s이(가) %s를 공격합니다!\n", attacker->name, defender->name);
 
     defender->health -= damage;
-    if (defender->health < 0) defender->health = 0;
+    if (defender->cur_health < 0) defender->cur_health = 0;
 
     printf("%s이(가) %d 데미지를 입혔습니다! (남은 체력: %d)\n", 
-           attacker->name, damage, defender->health);
+           attacker->name, damage, defender->cur_health);
 }
 
 
@@ -93,5 +93,5 @@ void battle(Character *player, Monster *enemy) {
 void displayStats(Character *character) {
     printf("%s의 상태:\n", character->name);
     printf("체력: %d/%d | 힘: %d | 민첩: %d | 운: %d\n", 
-           character->health, character->max_Health, character->strength, character->agility, character->luck);
+           character->cur_health, character->max_health, character->strength, character->agility, character->luck);
 }

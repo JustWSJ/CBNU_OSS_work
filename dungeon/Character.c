@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "character.h"
+#include "Character.h"
 
 // 캐릭터 데이터 정의
 Character player = {"Crowler", 5, 5, 5, 5, 5, 5, 100, 100, -1};
