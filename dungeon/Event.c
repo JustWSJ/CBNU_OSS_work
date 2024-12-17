@@ -29,7 +29,7 @@ void callEvent(char flag){
         //  call battle
         srand(time(NULL));
         //battle(getPlayer(), getMonster(rand()%5));
-        battle(getPlayer(), getPlayer());
+        //battle(getPlayer(), getPlayer());
         return;
         case 'S':
         //  call search

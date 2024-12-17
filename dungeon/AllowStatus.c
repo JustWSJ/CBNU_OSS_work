@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "character.h"
+#include "Character.h"
 #include "console_util.h"
 #include "key_input.h"
 

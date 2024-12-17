@@ -1,7 +1,7 @@
 #ifndef SAVE_H
 #define SAVE_H
 
-#include "character.h"
+#include "Character.h"
 #include "inventory.h"
 
 void saveStatus(Character* player);
