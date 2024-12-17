@@ -20,7 +20,6 @@
 // *X (eXit): 출구
 
 void callEvent(char flag){
-    Character * player = getPlayer();
     switch(flag){
         case 'D':
         //  call dungeon
@@ -29,7 +28,8 @@ void callEvent(char flag){
         case 'B':
         //  call battle
         srand(time(NULL));
-        battle(player, getMonster(rand()%5));
+        //battle(getPlayer(), getMonster(rand()%5));
+        battle(getPlayer(), getPlayer());
         return;
         case 'S':
         //  call search
