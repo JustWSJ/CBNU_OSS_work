@@ -28,8 +28,7 @@ void callEvent(char flag){
         case 'B':
         //  call battle
         srand(time(NULL));
-        //battle(getPlayer(), getMonster(rand()%5));
-        //battle(getPlayer(), getPlayer());
+        battle(getPlayer(), getMonster(rand()%5));
         return;
         case 'S':
         //  call search

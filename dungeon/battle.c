@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "battle.h"
-#include "inventory.h"
+// #include "inventory.h"//
 
 // 공격 함수 (Character vs Monster)
 void attackCharacterToMonster(Character *attacker, Monster *defender) {
@@ -25,7 +25,7 @@ void attackMonsterToCharacter(Monster *attacker, Character *defender) {
 
     printf("%s이(가) %s를 공격합니다!\n", attacker->name, defender->name);
 
-    defender->health -= damage;
+    defender->cur_health -= damage;
     if (defender->cur_health < 0) defender->cur_health = 0;
 
     printf("%s이(가) %d 데미지를 입혔습니다! (남은 체력: %d)\n", 
@@ -70,7 +70,7 @@ void battle(Character *player, Monster *enemy) {
         } else if (choice == 2) {  // 도망
             if (escape(player, enemy)) return;
         } else if (choice == 3) {  // 인벤토리 사용
-            useItem(player);
+            //useItem(player); //테스트를 위해 일단 주석 처리
         } else {
             printf("잘못된 선택입니다.\n");
         }

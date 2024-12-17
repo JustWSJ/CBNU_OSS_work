@@ -6,7 +6,7 @@
 #include "saveLoad.h"
 #include "dungeon.h"
 #include "key_input.h"
-//#include "battle.h"
+#include "battle.h"
 
 int mainMenu(void);
 void InitializeSystem(void);
