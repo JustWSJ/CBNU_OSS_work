@@ -309,8 +309,8 @@ char** allocationfactor(int floor, int size, char** map) {
         // 랜덤 요소 배치
         place_element('B', floor / 10 + 2, size, map_fac); // 전투 요소
         place_element('F', floor / 15 + 1, size, map_fac); // 강제 이벤트
-        place_element('I', floor / 20 + 1, size, map_fac); // 아이템 수색
-        place_element('S', floor / 10 + 3, size, map_fac); // 수색 후 전투
+        //place_element('I', floor / 20 + 1, size, map_fac); // 아이템 수색
+        //place_element('S', floor / 10 + 3, size, map_fac); // 수색 후 전투
 
         // 경로 유효성 검사
         validPath = isValidPath(map_fac, size, startX, startY, exitX, exitY);

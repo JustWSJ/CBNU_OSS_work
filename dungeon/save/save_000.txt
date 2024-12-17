@@ -1,0 +1,1 @@
+Health: 18Strength: 7Agility: 5Intelligence: 5Sensory: 5Luck: 5max_health: 360cur_health: 360Maxfloor: 0
