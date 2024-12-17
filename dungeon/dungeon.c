@@ -133,7 +133,7 @@ void DungeonAdventure(int floor) {
         SaveToFile(filename_arr1, map, size);      // arr1 저장
     }
     deleteDungeonFiles2(floor);
-    map_fac = allocationfactor(floor, size, map); // arr2 생성
+    map_fac = allocationfactor(floor, size, map, getPlayer()); // arr2 생성
     SaveToFile(filename_arr2, map_fac, size); // arr2 저장
     //draw Map
     printf(" 던전 %d층: %dx%d  이동: 방향키, 탐사: ENTER/SPACE", floor, size - 2, size - 2);
