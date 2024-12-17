@@ -3,7 +3,7 @@
 #include "character.h"
 
 // 캐릭터 데이터 정의
-Character player = {"Crowler", 5, 5, 5, 5, 5, 5, 100, 0};
+Character player = {"Crowler", 5, 5, 5, 5, 5, 5, 100, 100, -1};
 
 // Getter 함수
 Character* getPlayer() {
@@ -29,6 +29,10 @@ void updatePlayerStat(const int stat, int value) {
         player.sensory = value;
     } else if (stat == 5) {
         player.luck = value;
+    } else if (stat == 6) {
+        player.max_health = value;
+    } else if (stat == 7) {
+        player.cur_health = value;
     } else {
         printf("Error: Unknown stat.\n");
     }
