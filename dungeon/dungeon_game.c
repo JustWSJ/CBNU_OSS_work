@@ -19,10 +19,12 @@ int main() {
     int selectedOption = mainMenu(); // 메인 메뉴 표시 및 선택값 반환
     StartingOption(selectedOption, player);
    
-    printf("설정한 스탯 저장하고 마을 화면 넘어가기.\nPress Enter.\n"); //여기가 while문 0층이 되어야함.
-    wait(); // 지우기
-    Dungeon();
-        
+   while(1){
+        printf("설정한 스탯 저장하고 마을 화면 넘어가기.\nPress Enter.\n"); //여기가 while문 0층이 되어야함.
+        wait(); // 지우기
+        Dungeon();
+        saveStatus(player);
+   }    
     clearScreen();
     printf("test complete: \n");
 
