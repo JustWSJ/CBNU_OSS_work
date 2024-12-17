@@ -180,6 +180,8 @@ void showStatusAllocation() {
                         updatePlayerStat(3, intelligence);
                         updatePlayerStat(4, sensory);
                         updatePlayerStat(5, luck);
+                        updatePlayerStat(6, health * 20);
+                        updatePlayerStat(7, health * 20);
                         return;
                     } else if (choice == 1) {
                         clearScreen();
