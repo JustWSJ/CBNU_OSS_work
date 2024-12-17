@@ -8,6 +8,7 @@
 #include "key_input.h"
 #include "dungeon.h"
 #include "saveLoad.h"
+#include "Character.h"
 
 #define INDENT 1
 #define GAP 1
@@ -124,7 +125,11 @@ void DungeonAdventure(int floor) {
     //map_fac = LoadFromFile(filename_arr2, size); // arr2 불러오기
 
     if (!map) { // 저장된 맵이 없으면 새로 생성
-        map = CreateDungeon(floor, size); // arr1 생성
+        if(floor % 10 != 0){
+            map = CreateDungeon(floor, size); // arr1 생성
+        } else{
+            map = CreatebossDungeon(floor, size)
+        }
         SaveToFile(filename_arr1, map, size);      // arr1 저장
     }
     deleteDungeonFiles2(floor);
@@ -251,7 +256,7 @@ int DungeonSize(int floor) {
     if (isClear(floor) == 0 && floor % 10 == 0) {
         return -1;
     } else if (floor % 10 == 0) {
-        return -2;
+        return 5;
     } else if (floor / 10 < 1) {
         return 7;
     } else if (floor > 90) {
@@ -276,49 +281,111 @@ char** CreateDungeon(int floor, int size) {
     dungeon[1][size / 2] = 'R';
     return dungeon;
 }
-
-char** allocationfactor(int floor, int size, char** map) {
-    char** map_fac = (char**)malloc(size * sizeof(char*));
+char** CreatebossDungeon(int floor, int size) {
+    char** dungeon = (char**)malloc(size * sizeof(char*));
     for (int i = 0; i < size; i++) {
-        map_fac[i] = (char*)malloc(size * sizeof(char)); // 각 행에 메모리 할당
-    }
+        dungeon[i] = (char*)malloc(size * sizeof(char));
 
-    int startX = 0, startY = size / 2; // 입구 위치
-    int exitX  = rand() % (size - 2) + 1, exitY = rand() % (size - 2) + 1; // 출구 랜덤 위치
-    
-
-    int validPath = 0; // 경로 유효성 플래그
-    while (!validPath) {
-        // 요소 초기화
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                map_fac[i][j] = 'R'; // 기본 길
+        for (int j = 0; j < size; j++) {
+            if (i == 0 || i == 1 || i == size - 1 || i == size - 1 || j == 0 || j == size - 1) {
+                dungeon[i][j] = 'W'; // 테두리 벽
+            } else if (rand() % 5 == 0) { // 내부에 중간 벽 'w' 랜덤 배치
+                dungeon[i][j] = 'w';
+            } else {
+                dungeon[i][j] = 'R'; // 기본 길
             }
         }
+    }
+    dungeon[1][size / 2] = 'R';
+    return dungeon;
+}
 
-        // 입구와 출구 배치
-        exitX  = rand() % (size - 2) + 1;
-        exitY = rand() % (size - 2) + 1;
-        while (map[exitX][exitY] == 'w' || map[exitX][exitY] == 'W') {
-            exitX = rand() % (size - 2) + 1;
-            exitY = rand() % (size - 2) + 1;
+char** allocationfactor(int floor, int size, char** map, Character* player) {
+    char** map_fac = (char**)malloc(size * sizeof(char*));
+    if(floor % 10 != 0){
+        for (int i = 0; i < size; i++) {
+            map_fac[i] = (char*)malloc(size * sizeof(char)); // 각 행에 메모리 할당
         }
-        map_fac[startX][startY] = 'E'; // 입구
-        map_fac[exitX][exitY] = 'X';   // 출구
 
-        // 랜덤 요소 배치
-        place_element('B', floor / 10 + 2, size, map_fac); // 전투 요소
-        place_element('F', floor / 15 + 1, size, map_fac); // 강제 이벤트
-        //place_element('I', floor / 20 + 1, size, map_fac); // 아이템 수색
-        //place_element('S', floor / 10 + 3, size, map_fac); // 수색 후 전투
+        int startX = 0, startY = size / 2; // 입구 위치
+        int exitX  = rand() % (size - 2) + 1, exitY = rand() % (size - 2) + 1; // 출구 랜덤 위치
+        
 
-        // 경로 유효성 검사
-        validPath = isValidPath(map_fac, size, startX, startY, exitX, exitY);
+        int validPath = 0; // 경로 유효성 플래그
+        while (!validPath) {
+            // 요소 초기화
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    map_fac[i][j] = 'R'; // 기본 길
+                }
+            }
 
-        if (!validPath) {
-            // 경로가 유효하지 않으면 메모리 해제
-            for (int i = 0; i < size; i++) free(map_fac[i]);
-            free(map_fac);
+            // 입구와 출구 배치
+            exitX  = rand() % (size - 2) + 1;
+            exitY = rand() % (size - 2) + 1;
+            while (map[exitX][exitY] == 'w' || map[exitX][exitY] == 'W') {
+                exitX = rand() % (size - 2) + 1;
+                exitY = rand() % (size - 2) + 1;
+            }
+            map_fac[startX][startY] = 'E'; // 입구
+            map_fac[exitX][exitY] = 'X';   // 출구
+
+            // 랜덤 요소 배치
+            place_element('B', floor / 10 + 2, size, map_fac); // 전투 요소
+            place_element('F', floor / 15 + 1, size, map_fac); // 강제 이벤트
+            //place_element('I', floor / 20 + 1, size, map_fac); // 아이템 수색
+            //place_element('S', floor / 10 + 3, size, map_fac); // 수색 후 전투
+
+            // 경로 유효성 검사
+            validPath = isValidPath(map_fac, size, startX, startY, exitX, exitY);
+
+            if (!validPath) {
+                // 경로가 유효하지 않으면 메모리 해제
+                for (int i = 0; i < size; i++) free(map_fac[i]);
+                free(map_fac);
+            }
+        }
+    }
+    //  make boss room
+    else if(player->Maxfloor <= floor){
+        for (int i = 0; i < size; i++) {
+            map_fac[i] = (char*)malloc(size * sizeof(char)); // 각 행에 메모리 할당
+        }
+
+        int startX = 0, startY = size / 2; // 입구 위치
+        int exitX  = 3, exitY = 3; // 출구 랜덤 위치
+        
+
+        int validPath = 0; // 경로 유효성 플래그
+        while (!validPath) {
+            // 요소 초기화
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    map_fac[i][j] = 'R'; // 기본 길
+                }
+            }
+
+            // 입구와 출구 배치
+            exitX  = 3;
+            exitY = 3;
+            
+            map_fac[startX][startY] = 'E'; // 입구
+            map_fac[exitX][exitY] = 'X';   // 출구
+
+            // 랜덤 요소 배치
+            place_element('K', floor / 10 + 2, size, map_fac); // boss
+            //place_element('F', floor / 15 + 1, size, map_fac); // 강제 이벤트
+            //place_element('I', floor / 20 + 1, size, map_fac); // 아이템 수색
+            //place_element('S', floor / 10 + 3, size, map_fac); // 수색 후 전투
+
+            // 경로 유효성 검사
+            validPath = isValidPath(map_fac, size, startX, startY, exitX, exitY);
+
+            if (!validPath) {
+                // 경로가 유효하지 않으면 메모리 해제
+                for (int i = 0; i < size; i++) free(map_fac[i]);
+                free(map_fac);
+            }
         }
     }
 
