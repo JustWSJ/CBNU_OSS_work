@@ -36,6 +36,8 @@ void saveStatus(Character* player) {
     fprintf(file, "Intelligence: %d", player->intelligence);
     fprintf(file, "Sensory: %d", player->sensory);
     fprintf(file, "Luck: %d", player->luck);
+    fprintf(file, "max_health: %d", player->max_health);
+    fprintf(file, "cur_health: %d", player->cur_health);
     fprintf(file, "Maxfloor: %d", player->Maxfloor);
 
     fclose(file); // 파일 닫기
@@ -60,6 +62,8 @@ int loadStatus(Character* player) {
         fscanf(file, "Intelligence: %d", &player->intelligence) != 1 ||
         fscanf(file, "Sensory: %d", &player->sensory) != 1 ||
         fscanf(file, "Luck: %d", &player->luck) != 1 ||
+        fscanf(file, "max_health: %d", &player->max_health) != 1 ||
+        fscanf(file, "cur_health: %d", &player->cur_health) != 1 ||
         fscanf(file, "Maxfloor: %d", &player->Maxfloor) != 1) {
         printf("파일 형식이 잘못되었습니다: %s\n", filename);
         fclose(file);
