@@ -2,7 +2,7 @@
 #define BATTLE_H
 
 #include "Character.h"
-#include "Monster.h"
+#include "monster.h"
 
 // 함수 선언
 void attackCharacterToMonster(Character *attacker, Monster *defender);
