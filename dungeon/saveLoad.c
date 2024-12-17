@@ -39,7 +39,7 @@ void saveStatus(Character* player) {
     fprintf(file, "Maxfloor: %d", player->Maxfloor);
 
     fclose(file); // 파일 닫기
-    printf("저장 완료: %s\n", filename);
+    //printf("저장 완료: %s\n", filename);
 }
 
 int loadStatus(Character* player) {
