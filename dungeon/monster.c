@@ -2,6 +2,7 @@
 #include "monster.h"
 
 // 일반 몬스터 추가
+Monster M_000 = {"연습용 허수아비", 5, 1, 1};
 Monster M_001 = {"M_001", 20, 2, 1};
 Monster M_002 = {"M_002", 25, 3, 1};
 Monster M_003 = {"M_003", 30, 4, 2};
