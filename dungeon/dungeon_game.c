@@ -7,12 +7,55 @@
 #include "dungeon.h"
 #include "key_input.h"
 #include "battle.h"
+#include "hotel.h"
 
 
 int mainMenu(void);
 void InitializeSystem(void);
 void StartingOption(int, Character *);
 
+void villageMenu(Character *player) {
+    int selected = 0; // 메뉴 선택 초기값
+    char* villageOptions[2] = { "1. 호텔 방문", "2. 던전 입장" };
+
+    while (1) {
+        // 메뉴 출력
+        gotoxy(0, 20); // 20번째 줄부터 시작
+        printf("==================== 마을 ====================\n");
+        for (int i = 0; i < 2; i++) {
+            gotoxy(2, 22 + i); // 메뉴 위치
+            printf("                                     "); // 기존 글씨 지우기
+            gotoxy(2, 22 + i);
+            if (i == selected) {
+                SetColor(0x0E); // 선택 항목은 노란색
+                printf("> %s", villageOptions[i]);
+                SetColor(0x0F); // 원래 색상
+            } else {
+                printf("  %s", villageOptions[i]);
+            }
+        }
+
+        // 키 입력 처리
+        if (isKeyPressed(KEY_UP)) {
+            selected = (selected - 1 + 2) % 2; // 위로 이동
+            Sleep(150);
+        } else if (isKeyPressed(KEY_DOWN)) {
+            selected = (selected + 1) % 2; // 아래로 이동
+            Sleep(150);
+        } else if (isKeyPressed(KEY_ENTER)) {
+            if (selected == 0) { // 호텔 방문 선택
+                gotoxy(0, 25);
+                printf("호텔을 방문합니다...\n");
+                visitHotel(player); // 호텔 기능 호출
+            } else if (selected == 1) { // 던전 입장 선택
+                gotoxy(0, 25);
+                printf("던전에 입장합니다...\n");
+                Dungeon(); // 던전 입장
+            }
+            break; // 메뉴 반복 종료 후 마을 메인으로 돌아감
+        }
+    }
+}
 
 int main() {
     InitializeSystem();
@@ -20,14 +63,11 @@ int main() {
     int selectedOption = mainMenu(); // 메인 메뉴 표시 및 선택값 반환
     StartingOption(selectedOption, player);
    
-   while(1){
+    while (1) { // 마을 루프
+        villageMenu(player); // 마을 메뉴 표시 및 선택 처리
+        saveStatus(player); // 상태 저장
+    }
 
-
-        printf("설정한 스탯 저장하고 마을 화면 넘어가기.\nPress Enter.\n"); //여기가 while문 0층이 되어야함.
-        wait(); // 지우기
-        Dungeon();
-        saveStatus(player);
-   }    
     clearScreen();
     printf("test complete: \n");
 
