@@ -1,6 +1,5 @@
 #include "items.h"
 
-// 무기 데이터
 Item weapons[WEAPON_COUNT] = {
     {"Steel Sword", ITEM_WEAPON, 1, {0, 10, 2, 0, 5, 1}, ""},
     {"Iron Axe", ITEM_WEAPON, 1, {0, 12, 1, 0, 3, 2}, ""},
@@ -18,13 +17,33 @@ Item armors[ARMOR_COUNT] = {
     {"Helm of Insight", ITEM_ARMOR, 1, {5, 0, 0, 5, 4, 3}, ""}
 };
 
-// 소모품 데이터
+// 소모품 데이터 (강화 버전 포함)
 Item consumables[CONSUMABLE_COUNT] = {
     {"Health Potion", ITEM_CONSUMABLE, 10, {20, 0, 0, 0, 0, 0}, ""},
     {"Mana Elixir", ITEM_CONSUMABLE, 7, {0, 0, 0, 20, 0, 0}, ""},
     {"Strength Tonic", ITEM_CONSUMABLE, 5, {0, 5, 0, 0, 0, 2}, ""},
     {"Agility Brew", ITEM_CONSUMABLE, 8, {0, 0, 5, 0, 1, 1}, ""},
-    {"Intelligence Syrup", ITEM_CONSUMABLE, 6, {0, 0, 0, 5, 0, 3}, ""}
+    {"Intelligence Syrup", ITEM_CONSUMABLE, 6, {0, 0, 0, 5, 0, 3}, ""},
+    // 강화 버전 소모품
+    {"Health Potion +1", ITEM_CONSUMABLE, 5, {30, 0, 0, 0, 0, 0}, ""},
+    {"Health Potion +2", ITEM_CONSUMABLE, 3, {50, 0, 0, 0, 0, 0}, ""},
+    {"Health Potion +3", ITEM_CONSUMABLE, 1, {70, 0, 0, 0, 0, 0}, ""},
+
+    {"Mana Elixir +1", ITEM_CONSUMABLE, 5, {0, 0, 0, 30, 0, 0}, ""},
+    {"Mana Elixir +2", ITEM_CONSUMABLE, 3, {0, 0, 0, 50, 0, 0}, ""},
+    {"Mana Elixir +3", ITEM_CONSUMABLE, 1, {0, 0, 0, 70, 0, 0}, ""},
+
+    {"Strength Tonic +1", ITEM_CONSUMABLE, 5, {0, 3, 0, 0, 0, 0}, ""},
+    {"Strength Tonic +2", ITEM_CONSUMABLE, 3, {0, 5, 0, 0, 0, 0}, ""},
+    {"Strength Tonic +3", ITEM_CONSUMABLE, 1, {0, 7, 0, 0, 0, 0}, ""},
+
+    {"Agility Brew +1", ITEM_CONSUMABLE, 5, {0, 0, 3, 0, 0, 0}, ""},
+    {"Agility Brew +2", ITEM_CONSUMABLE, 3, {0, 0, 5, 0, 0, 0}, ""},
+    {"Agility Brew +3", ITEM_CONSUMABLE, 1, {0, 0, 7, 0, 0, 0}, ""},
+
+    {"Intelligence Syrup +1", ITEM_CONSUMABLE, 5, {0, 0, 0, 3, 0, 0}, ""},
+    {"Intelligence Syrup +2", ITEM_CONSUMABLE, 3, {0, 0, 0, 5, 0, 0}, ""},
+    {"Intelligence Syrup +3", ITEM_CONSUMABLE, 1, {0, 0, 0, 7, 0, 0}, ""}
 };
 
 // 전리품 데이터

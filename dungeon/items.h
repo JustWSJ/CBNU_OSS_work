@@ -4,7 +4,7 @@
 #define MAX_ITEMS 100        // 인벤토리 최대 아이템 수
 #define WEAPON_COUNT 5       // 무기 종류 수
 #define ARMOR_COUNT 5        // 방어구 종류 수
-#define CONSUMABLE_COUNT 5   // 소모품 종류 수
+#define CONSUMABLE_COUNT 20  // 소모품 종류 수
 #define LOOT_COUNT 5         // 전리품 종류 수
 
 // 아이템 타입 정의
