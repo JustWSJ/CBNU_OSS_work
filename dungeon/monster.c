@@ -17,6 +17,11 @@ Monster M_012 = {"M_012", 80, 25, 12};
 Monster M_013 = {"M_013", 45, 10, 15};
 Monster M_014 = {"M_014", 75, 22, 10};
 Monster M_015 = {"M_015", 60, 15, 20};
+Monster M_016 = {"Troll", 70, 18, 12};
+Monster M_017 = {"Harpy", 35, 15, 20};
+Monster M_018 = {"Ogre", 85, 25, 15};
+Monster M_019 = {"Ghoul", 50, 20, 10};
+Monster M_020 = {"Golem", 120, 30, 25};
 
 // 보스 몬스터 추가
 Monster M_1001 = {"Dark Lord", 500, 80, 30};
@@ -48,6 +53,11 @@ Monster* getMonster(int Monster_value) {
         case 13: return &M_013;
         case 14: return &M_014;
         case 15: return &M_015;
+        case 16: return &M_016;
+        case 17: return &M_017;
+        case 18: return &M_018;
+        case 19: return &M_019;
+        case 20: return &M_020;
         case 1001: return &M_1001;
         case 1002: return &M_1002;
         case 1003: return &M_1003;
