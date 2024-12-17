@@ -141,7 +141,7 @@ void DungeonAdventure(int floor) {
     gotoxy(INDENT + ((size/2) * 2), GAP + 0);
     printf("●");
     // 탐사 시작
-    MoveDungeon(map, map_fac, size);
+    MoveDungeon(map, map_fac, size, floor);
     SaveToFile(filename_arr1, map, size);
     deleteDungeonFiles2(floor);
 
@@ -338,7 +338,7 @@ void place_element(char element, int count, int size, char **map_fac) {
 }
 
 // 플레이어 이동
-void MoveDungeon(char **map, char **map_fac, int size) {
+void MoveDungeon(char **map, char **map_fac, int size, int floor) {
     int locv = 0;                 // 플레이어의 현재 세로 위치 (행)
     int loch = size / 2;          // 플레이어의 현재 가로 위치 (열)
 
@@ -373,7 +373,7 @@ void MoveDungeon(char **map, char **map_fac, int size) {
             } else {
                 gotoxy(1, size + 2);
                 //printf("Processing event: %c...  \n", map_fac[locv][loch]);
-                callEvent(map_fac[locv][loch]);
+                callEvent(map_fac[locv][loch], floor);
                 map_fac[locv][loch] = 'R'; // 이벤트 완료 후 기본 길로 변경
             }
         }
@@ -529,12 +529,6 @@ void draw_loc(int locv, int loch){
 }
 
 // *B (Battle): 강제 전투
-// 1E (Entrance): 입구
 // *F (Force): 강제 이벤트
-// .I (Inventory): 수색 후 아이템(이나 스테이터스?) 얻는 이벤트
 // *K (King): 보스 전투
-// (L) (Location): 플레이어의 현재 위치 (사용할지는 미지수, 다른 창 넘기는 방식이면 써야 함)
-// R (Road): 수색 불가능한 길
-// .S (Search): 수색 후 전투
-// 0W (Wall): 벽. 막힘
 // *X (eXit): 출구

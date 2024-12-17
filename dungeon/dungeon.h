@@ -8,7 +8,7 @@ int isClear(int floor);
 int DungeonSize(int floor);
 char** CreateDungeon(int floor, int size);
 void DungeonAdventure(int floor);
-void MoveDungeon(char **map, char **map_fac, int size);
+void MoveDungeon(char **map, char **map_fac, int size, int floor);
 int check_P_Event(char c);
 int check_W(char c);
 int check_w(char c);
