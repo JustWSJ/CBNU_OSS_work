@@ -46,7 +46,7 @@ void callEvent(char flag, int floor){
 
         case 'K':
         //  call boss battle
-        battle(getPlayer(), 1000 + (floor / 10));
+        battle(getPlayer(), getMonster(1000 + (floor / 10)));
         return;
 
         case 'F':
@@ -54,7 +54,7 @@ void callEvent(char flag, int floor){
         srand(time(NULL));
         int r = rand()%33;
         if(r > 23){
-            solvepuzzle(getPlayer());
+            solvePuzzle(getPlayer());
         }else if(r > 13){
             unlockBox(getPlayer());
         } else {
