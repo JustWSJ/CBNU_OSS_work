@@ -69,6 +69,8 @@ Monster M_1010 = {"M_1010", 1500, 300, 120};
 // 기존 몬스터 정의 및 반환 함수
 Monster* getMonster(int Monster_value) {
     switch (Monster_value) {
+        //  common
+        case 0: return &M_000;
         case 1: return &M_001;
         case 2: return &M_002;
         case 3: return &M_003;
@@ -119,6 +121,7 @@ Monster* getMonster(int Monster_value) {
         case 48: return &M_048;
         case 49: return &M_049;
         case 50: return &M_050;
+        //  boss
         case 1001: return &M_1001;
         case 1002: return &M_1002;
         case 1003: return &M_1003;

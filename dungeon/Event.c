@@ -37,7 +37,7 @@ void callEvent(char flag, int floor){
         case 'B':
         //  call battle
         srand(time(NULL));
-        battle(getPlayer(), getMonster((rand()%4 + 1) + ((floor / 10) * 10)));
+        battle(getPlayer(), getMonster((rand()%5) + ((floor / 10) * 5)));
         return;
 
         case 'S':
