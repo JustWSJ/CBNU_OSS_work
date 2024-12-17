@@ -443,20 +443,22 @@ void MoveDungeon(char **map, char **map_fac, int size) {
             }
         }
 
-
+        /*
         // **5. 탐사 키 입력 처리**
         if (isKeyPressed(KEY_ENTER) || isKeyPressed(KEY_SPACE)) {
             if (map_fac[locv][loch] != 'R') { // 현재 위치가 탐사 가능한 이벤트라면
                 gotoxy(1, size + 2);
                 //printf("Exploring: %c...         \n", map_fac[locv][loch]);
-                callEvent(map_fac[locv][loch]);
+                //callEvent(map_fac[locv][loch]);
+                printf("212");
+                wait();
                 map_fac[locv][loch] = 'R'; // 탐사 완료 후 기본 길로 변경
             } else {
                 gotoxy(1, size + 2);
                 printf("Nothing to explore here. \n");
             }
             Sleep(190);
-        }
+        }*/
     }
 }
 

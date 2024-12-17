@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "console_util.h"
+#include "key_input.h"
 #include "battle.h"
 // #include "inventory.h"//
+#define GAP 20
 
 // 공격 함수 (Character vs Monster)
 void attackCharacterToMonster(Character *attacker, Monster *defender, int * enemy_cur_hp) {
@@ -55,7 +58,8 @@ void battle(Character *player, Monster *enemy) {
     int enemy_cur_hp = enemy->M_hp;
     while (player->health > 0 && enemy_cur_hp > 0) {
         // 상태 표시
-        printf("\n==== 전투 상황 ====\n");
+        gotoxy(0, 20);
+        printf("==================== 전투  상황 ====================\n");
         displayStats(player);
         printf("\n%s의 상태: 체력: %d\n", enemy->name, enemy_cur_hp);
 
@@ -72,7 +76,7 @@ void battle(Character *player, Monster *enemy) {
         } else if (choice == 3) {  // 인벤토리 사용
             //useItem(player); //테스트를 위해 일단 주석 처리
         } else {
-            printf("잘못된 선택입니다.\n");
+            printf("[Error]잘못된 선택입니다.\n");
         }
 
         // 몬스터의 턴 (몬스터가 살아있을 때만 공격)
@@ -83,15 +87,15 @@ void battle(Character *player, Monster *enemy) {
 
     // 전투 결과
     if (player->health <= 0) {
-        printf("\n플레이어가 패배했습니다... 게임 종료.\n");
+        printf("\n 플레이어가 패배했습니다... 게임 종료.\n");
     } else {
-        printf("\n%s를 물리쳤습니다!\n", enemy->name);
+        printf("\n %s를 물리쳤습니다!\n", enemy->name);
     }
 }
 
 // 상태 표시 함수
 void displayStats(Character *character) {
-    printf("%s의 상태:\n", character->name);
-    printf("체력: %d/%d | 힘: %d | 민첩: %d | 운: %d\n", 
+    printf(" %s의 상태:\n", character->name);
+    printf(" 체력: %d/%d   \n 힘: %d   \n 민첩: %d   \n 운: %d   \n", 
            character->cur_health, character->max_health, character->strength, character->agility, character->luck);
 }
