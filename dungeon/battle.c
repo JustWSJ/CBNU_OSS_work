@@ -4,7 +4,7 @@
 #include "console_util.h"
 #include "key_input.h"
 #include "battle.h"
-// #include "inventory.h"//
+#include "inventory.h"//
 #define INDENT 1
 #define GAP 20
 
@@ -59,63 +59,71 @@ void battle(Character *player, Monster *enemy) {
     char* menu[3] = { "1. 공격", "2. 도망", "3. 인벤토리" };
 
     while (player->health > 0 && enemy_cur_hp > 0) {
-        // 상태 표시
-
+        // 상태 표시 (20번째 줄 아래로 고정)
         gotoxy(0, 20);
-        printf("==================== 전투  상황 ====================\n");
+        printf("==================== 전투 상황 ====================\n");
+
+        // 플레이어 상태 표시 (왼쪽 20번째 줄 아래)
+        gotoxy(2, 22);
+        printf("플레이어 상태:                          ");
         displayStats(player);
-        printf("\n%s의 상태:\n체력: %d\n", enemy->name, enemy_cur_hp);
 
-        // 행동 선택 메뉴 출력
-        while (1) {
-            for (int i = 0; i < 3; i++) {
-                gotoxy(30, 26 + i); // 메뉴 위치 설정
-                if (i == selected) {
-                    SetColor(0x0E); // 선택된 항목은 노란색
-                    printf("> %s", menu[i]);
-                    SetColor(0x0F); // 색상 원래대로
-                } else {
-                    printf("  %s", menu[i]);
-                }
-            }
+        // 몬스터 상태 표시 (오른쪽)
+        gotoxy(35, 22);
+        printf("%s 상태: 체력: %d            ", enemy->name, enemy_cur_hp);
 
-            // 키 입력 처리
-            if (isKeyPressed(KEY_UP)) {
-                selected = (selected - 1 + 3) % 3; // 위로 이동
-                Sleep(150);
-            } else if (isKeyPressed(KEY_DOWN)) {
-                selected = (selected + 1) % 3; // 아래로 이동
-                Sleep(150);
-            } else if (isKeyPressed(KEY_ENTER)) {
-                gotoxy(0, 30);
-                break; // 선택 확정
+        // 행동 선택 메뉴 출력 (아래쪽 30번째 줄부터)
+        gotoxy(0, 30);
+        printf("========== 행동 선택 ==========\n");
+        for (int i = 0; i < 3; i++) {
+            gotoxy(2, 32 + i); // 메뉴 출력 위치 (고정)
+            printf("                              "); // 기존 글씨 지우기
+            gotoxy(2, 32 + i);
+            if (i == selected) {
+                SetColor(0x0E); // 노란색 강조
+                printf("> %s", menu[i]);
+                SetColor(0x0F); // 기본 색상
+            } else {
+                printf("  %s", menu[i]);
             }
         }
 
-        // 선택된 행동 실행
-        if (selected == 0) { // 공격
-            attackCharacterToMonster(player, enemy, &enemy_cur_hp);
-            wait();
-        } else if (selected == 1) { // 도망
-            if (escape(player, enemy)) return;
-        } else if (selected == 2) { // 인벤토리
-            // useItem(player); // 인벤토리 기능 추가 예정
-            printf("인벤토리 기능은 아직 구현되지 않았습니다.                      \n                       \n");
-        }
-
-        // 몬스터의 턴
-        if (enemy_cur_hp > 0) {
-            gotoxy(0,30);
-            attackMonsterToCharacter(enemy, player);
+        // 키 입력 처리
+        if (isKeyPressed(KEY_UP)) {
+            selected = (selected - 1 + 3) % 3; // 위로 이동
+            Sleep(150);
+        } else if (isKeyPressed(KEY_DOWN)) {
+            selected = (selected + 1) % 3; // 아래로 이동
+            Sleep(150);
+        } else if (isKeyPressed(KEY_ENTER)) {
+            break; // 선택 확정
         }
     }
 
-    // 전투 결과
-    gotoxy(0, 41);
+    // 선택된 행동 실행 (20번째 줄 하단에 표시)
+    gotoxy(0, 37);
+    printf("                                             "); // 기존 내용 지우기
+    gotoxy(0, 37);
+    if (selected == 0) { // 공격
+        attackCharacterToMonster(player, enemy, &enemy_cur_hp);
+    } else if (selected == 1) { // 도망
+        if (escape(player, enemy)) return;
+    } else if (selected == 2) { // 인벤토리
+        printf("인벤토리 기능은 아직 구현되지 않았습니다.\n");
+    }
+
+    // 몬스터의 턴
+    if (enemy_cur_hp > 0) {
+        gotoxy(0, 39);
+        attackMonsterToCharacter(enemy, player);
+    }
+
+    // 전투 결과 출력 (20번째 줄 아래)
+    gotoxy(0, 42);
     if (player->health <= 0) {
-        printf("\n플레이어가 패배했습니다... 게임 종료.              \n");
+        printf("플레이어가 패배했습니다... 게임 종료.\n");
     } else {
-        printf("\n%s를 물리쳤습니다!                \n", enemy->name);
+        printf("%s를 물리쳤습니다!\n", enemy->name);
     }
 }
 
