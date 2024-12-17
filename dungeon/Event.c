@@ -56,7 +56,7 @@ void callEvent(char flag, int floor){
         if(r > 23){
             solvepuzzle(getPlayer());
         }else if(r > 13){
-            unlockBox(getplayer());
+            unlockBox(getPlayer());
         } else {
             luckybox(getPlayer());
         }
