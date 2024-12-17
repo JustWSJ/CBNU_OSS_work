@@ -32,20 +32,24 @@ void attackMonsterToCharacter(Monster *attacker, Character *defender) {
            attacker->name, damage, defender->health);
 }
 
+
 // 도망 함수
 int escape(Character *player, Monster *enemy) {
-    int escapeChance = (player->agility * 100) / (enemy->M_def + 50);
-    int randomRoll = rand() % 100;
-    printf("도망 확률: %d%%, 결과: %d\n", escapeChance, randomRoll);
+    int baseAgility = player->agility; // 플레이어의 현재 민첩성
+    int randomRoll = (rand() % 30) + 1; // 1~30 사이의 랜덤 숫자
+    int escapeValue = baseAgility + randomRoll; // 민첩성 + 랜덤 값
 
-    if (randomRoll < escapeChance) {
+    printf("민첩성: %d, 랜덤 값: %d -> 도망 시도 값: %d\n", baseAgility, randomRoll, escapeValue);
+
+    if (escapeValue >= 30) { // 도망 시도 값이 30 이상일 때 성공
         printf("성공적으로 도망쳤습니다!\n");
         return 1; // 도망 성공
     } else {
-        printf("도망에 실패했습니다!\n");
+        printf("도망에 실패했습니다...\n");
         return 0; // 도망 실패
     }
 }
+
 
 // 전투 함수
 void battle(Character *player, Monster *enemy) {
