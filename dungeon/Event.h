@@ -3,6 +3,9 @@
 
 #include "battle.h"
 
-void callEvent(char flag);
+void solvePuzzle(Character* player);
+void unlockBox(Character* player);
+void luckybox(Character* player);
+void callEvent(char flag, int floor);
 
 #endif  //  EVENT_H
