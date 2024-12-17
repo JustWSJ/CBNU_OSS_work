@@ -5,17 +5,16 @@
 // #include "inventory.h"//
 
 // 공격 함수 (Character vs Monster)
-void attackCharacterToMonster(Character *attacker, Monster *defender) {
+void attackCharacterToMonster(Character *attacker, Monster *defender, int * enemy_cur_hp) {
     int damage = (attacker->strength * 2) - (defender->M_def / 2);
     if (damage < 0) damage = 0;
 
     printf("%s이(가) %s를 공격합니다!\n", attacker->name, defender->name);
 
-    defender->M_hp -= damage;
-    if (defender->M_hp < 0) defender->M_hp = 0;
+    enemy_cur_hp -= damage;
+    if (enemy_cur_hp < 0) enemy_cur_hp = 0;
 
-    printf("%s이(가) %d 데미지를 입혔습니다! (남은 체력: %d)\n", 
-           attacker->name, damage, defender->M_hp);
+    printf("%s이(가) %d 데미지를 입혔습니다! (%s의 남은 체력: %d)\n", attacker->name, damage, defender->name, enemy_cur_hp);
 }
 
 // 공격 함수 (Monster vs Character)
@@ -53,11 +52,12 @@ int escape(Character *player, Monster *enemy) {
 
 // 전투 함수
 void battle(Character *player, Monster *enemy) {
-    while (player->health > 0 && enemy->M_hp > 0) {
+    int enemy_cur_hp = enemy->M_hp;
+    while (player->health > 0 && enemy_cur_hp > 0) {
         // 상태 표시
         printf("\n==== 전투 상황 ====\n");
         displayStats(player);
-        printf("\n%s의 상태: 체력: %d\n", enemy->name, enemy->M_hp);
+        printf("\n%s의 상태: 체력: %d\n", enemy->name, enemy_cur_hp);
 
         // 플레이어의 턴
         printf("\n행동을 선택하세요:\n");
@@ -66,7 +66,7 @@ void battle(Character *player, Monster *enemy) {
         scanf("%d", &choice);
 
         if (choice == 1) {  // 공격
-            attackCharacterToMonster(player, enemy);
+            attackCharacterToMonster(player, enemy, &enemy_cur_hp);
         } else if (choice == 2) {  // 도망
             if (escape(player, enemy)) return;
         } else if (choice == 3) {  // 인벤토리 사용
@@ -76,7 +76,7 @@ void battle(Character *player, Monster *enemy) {
         }
 
         // 몬스터의 턴 (몬스터가 살아있을 때만 공격)
-        if (enemy->M_hp > 0) {
+        if (enemy_cur_hp > 0) {
             attackMonsterToCharacter(enemy, player);
         }
     }
