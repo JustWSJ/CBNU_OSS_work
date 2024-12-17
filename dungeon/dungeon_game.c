@@ -54,8 +54,8 @@ void villageMenu(Character *player) {
                 Sleep(190);
             } else if (selected == 1) { // 던전 입장 선택
                 printf("던전에 입장합니다...\n");
-                Dungeon(); // 던전 입장
                 Sleep(190);
+                Dungeon(); // 던전 입장
             }
             break; // 메뉴 반복 종료 후 마을 메인으로 돌아감
         }
