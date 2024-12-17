@@ -1,1 +1,1 @@
-Health: 13Strength: 12Agility: 5Intelligence: 5Sensory: 5Luck: 5max_health: 260cur_health: 260Maxfloor: 9
+Health: 9Strength: 16Agility: 5Intelligence: 5Sensory: 5Luck: 5max_health: 180cur_health: 180Maxfloor: 0

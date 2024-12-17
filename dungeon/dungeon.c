@@ -90,9 +90,13 @@ void Dungeon() {
                 printf("Dungeon Clear!\n");
                 wait();
                 exit(0);
-            } else if (isClear(floor)) {
-                option = DungeonEntrance(floor);
+            } 
+            else if(isClear(floor) && player->Maxfloor < floor) {
+                DungeonAdventure(floor);
                 player->Maxfloor = floor / 10;
+            }
+            else if (isClear(floor)) {
+                option = DungeonEntrance(floor);
                 saveStatus(player);
             }
             else {
@@ -128,7 +132,7 @@ void DungeonAdventure(int floor) {
         if(floor % 10 != 0){
             map = CreateDungeon(floor, size); // arr1 생성
         } else{
-            map = CreatebossDungeon(floor, size)
+            map = CreatebossDungeon(floor, size);
         }
         SaveToFile(filename_arr1, map, size);      // arr1 저장
     }
@@ -337,7 +341,7 @@ char** allocationfactor(int floor, int size, char** map, Character* player) {
             //place_element('S', floor / 10 + 3, size, map_fac); // 수색 후 전투
 
             // 경로 유효성 검사
-            validPath = isValidPath(map_fac, size, startX, startY, exitX, exitY);
+            validPath = isValidPath(map, size, startX, startY, exitX, exitY);
 
             if (!validPath) {
                 // 경로가 유효하지 않으면 메모리 해제
@@ -347,7 +351,7 @@ char** allocationfactor(int floor, int size, char** map, Character* player) {
         }
     }
     //  make boss room
-    else if(player->Maxfloor <= floor){
+    else if(player->Maxfloor < floor){
         for (int i = 0; i < size; i++) {
             map_fac[i] = (char*)malloc(size * sizeof(char)); // 각 행에 메모리 할당
         }
@@ -379,7 +383,7 @@ char** allocationfactor(int floor, int size, char** map, Character* player) {
             //place_element('S', floor / 10 + 3, size, map_fac); // 수색 후 전투
 
             // 경로 유효성 검사
-            validPath = isValidPath(map_fac, size, startX, startY, exitX, exitY);
+            validPath = isValidPath(map, size, startX, startY, exitX, exitY);
 
             if (!validPath) {
                 // 경로가 유효하지 않으면 메모리 해제
