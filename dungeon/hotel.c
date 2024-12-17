@@ -8,8 +8,8 @@ void visitHotel(Character* player) {
     printf("\n[호텔 방문]\n");
 
     // 체력 회복
-    player->health = player->max_health;
-    printf("체력이 완전히 회복되었습니다! (현재 체력: %d/%d)\n", player->health, player->max_health);
+    player->cur_health = player->max_health;
+    printf("체력이 완전히 회복되었습니다! (현재 체력: %d/%d)\n", player->cur_health, player->max_health);
 
     // 진행 상황 저장
     saveStatus(player);
