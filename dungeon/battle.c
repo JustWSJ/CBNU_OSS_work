@@ -11,10 +11,10 @@ void attackCharacterToMonster(Character *attacker, Monster *defender, int * enem
 
     printf("%s이(가) %s를 공격합니다!\n", attacker->name, defender->name);
 
-    enemy_cur_hp -= damage;
-    if (enemy_cur_hp < 0) enemy_cur_hp = 0;
+    *enemy_cur_hp -= damage;
+    if (*enemy_cur_hp < 0) *enemy_cur_hp = 0;
 
-    printf("%s이(가) %d 데미지를 입혔습니다! (%s의 남은 체력: %d)\n", attacker->name, damage, defender->name, enemy_cur_hp);
+    printf("%s이(가) %d 데미지를 입혔습니다! (%s의 남은 체력: %d)\n", attacker->name, damage, defender->name, *enemy_cur_hp);
 }
 
 // 공격 함수 (Monster vs Character)
