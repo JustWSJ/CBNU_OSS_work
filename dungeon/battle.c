@@ -4,32 +4,37 @@
 #include "battle.h"
 #include "inventory.h"
 
-// 공격 함수
-void attack(Character *attacker, Character *defender) {
-    if (dodge(attacker, defender)) {
-        printf("%s이(가) 공격을 회피했습니다!\n", defender->name);
-        return;
-    }
-
-    int damage = (attacker->strength * 2) - (defender->agility / 2);
+// 공격 함수 (Character vs Monster)
+void attackCharacterToMonster(Character *attacker, Monster *defender) {
+    int damage = (attacker->strength * 2) - (defender->M_def / 2);
     if (damage < 0) damage = 0;
 
-    // 치명타 계산
-    if (rand() % 100 < attacker->luck) {
-        damage *= 2;
-        printf("치명타! ");
-    }
+    printf("%s이(가) %s를 공격합니다!\n", attacker->name, defender->name);
+
+    defender->M_hp -= damage;
+    if (defender->M_hp < 0) defender->M_hp = 0;
+
+    printf("%s이(가) %d 데미지를 입혔습니다! (남은 체력: %d)\n", 
+           attacker->name, damage, defender->M_hp);
+}
+
+// 공격 함수 (Monster vs Character)
+void attackMonsterToCharacter(Monster *attacker, Character *defender) {
+    int damage = (attacker->M_atk * 2) - (defender->strength / 2);
+    if (damage < 0) damage = 0;
+
+    printf("%s이(가) %s를 공격합니다!\n", attacker->name, defender->name);
 
     defender->health -= damage;
     if (defender->health < 0) defender->health = 0;
 
-    printf("%s이(가) %s에게 %d 데미지를 입혔습니다! (남은 체력: %d)\n",
-           attacker->name, defender->name, damage, defender->health);
+    printf("%s이(가) %d 데미지를 입혔습니다! (남은 체력: %d)\n", 
+           attacker->name, damage, defender->health);
 }
 
 // 도망 함수
-int escape(Character *player, Character *enemy) {
-    int escapeChance = (player->agility * 100) / (enemy->agility + 50);
+int escape(Character *player, Monster *enemy) {
+    int escapeChance = (player->agility * 100) / (enemy->M_def + 50);
     int randomRoll = rand() % 100;
     printf("도망 확률: %d%%, 결과: %d\n", escapeChance, randomRoll);
 
@@ -42,64 +47,47 @@ int escape(Character *player, Character *enemy) {
     }
 }
 
-// 회피 함수
-int dodge(Character *attacker, Character *defender) {
-    int dodgeChance = defender->agility - (attacker->agility / 2);
-    if (dodgeChance < 0) dodgeChance = 0;
+// 전투 함수
+void battle(Character *player, Monster *enemy) {
+    while (player->health > 0 && enemy->M_hp > 0) {
+        // 상태 표시
+        printf("\n==== 전투 상황 ====\n");
+        displayStats(player);
+        printf("\n%s의 상태: 체력: %d\n", enemy->name, enemy->M_hp);
 
-    int randomRoll = rand() % 100;
-    return randomRoll < dodgeChance;
-}
+        // 플레이어의 턴
+        printf("\n행동을 선택하세요:\n");
+        printf("1. 공격  2. 도망  3. 인벤토리\n");
+        int choice;
+        scanf("%d", &choice);
 
-// 아이템 사용 함수 (소모품)
-void useItem(Character *player) {
-    manageConsumables(); // 인벤토리에서 소모품 관리 및 사용
+        if (choice == 1) {  // 공격
+            attackCharacterToMonster(player, enemy);
+        } else if (choice == 2) {  // 도망
+            if (escape(player, enemy)) return;
+        } else if (choice == 3) {  // 인벤토리 사용
+            useItem(player);
+        } else {
+            printf("잘못된 선택입니다.\n");
+        }
 
-    // 소모품 사용 후 최대 체력 초과 방지
-    if (player->health > player->max_health) {
-        player->health = player->max_health;
-        printf("체력이 최대 체력을 초과하여 %d로 조정되었습니다.\n", player->max_health);
+        // 몬스터의 턴 (몬스터가 살아있을 때만 공격)
+        if (enemy->M_hp > 0) {
+            attackMonsterToCharacter(enemy, player);
+        }
+    }
+
+    // 전투 결과
+    if (player->health <= 0) {
+        printf("\n플레이어가 패배했습니다... 게임 종료.\n");
+    } else {
+        printf("\n%s를 물리쳤습니다!\n", enemy->name);
     }
 }
 
 // 상태 표시 함수
 void displayStats(Character *character) {
-    printf("\n%s의 상태:\n", character->name);
-    printf("Health: %d/%d, Strength: %d, Agility: %d, Intelligence: %d, Sensory: %d, Luck: %d\n",
-           character->health, character->max_health, character->strength, character->agility,
-           character->intelligence, character->sensory, character->luck);
-}
-
-// 전투 함수
-void battle(Character *player, Character *enemy) {
-    while (player->health > 0 && enemy->health > 0) {
-        displayStats(player);
-        displayStats(enemy);
-
-        printf("\n행동을 선택하세요:\n");
-        printf("1. 전투  2. 도망  3. 인벤토리\n");
-        int choice;
-        scanf("%d", &choice);
-
-        if (choice == 1) {
-            attack(player, enemy);
-        } else if (choice == 2) {
-            if (escape(player, enemy)) return;
-        } else if (choice == 3) {
-            useItem(player);
-        } else {
-            printf("잘못된 선택입니다. 다시 시도하세요.\n");
-        }
-
-        // 적이 살아있다면 반격
-        if (enemy->health > 0) {
-            attack(enemy, player);
-        }
-    }
-
-    if (player->health <= 0) {
-        printf("\n플레이어가 패배했습니다... 게임 종료.\n");
-    } else {
-        printf("\n적을 물리쳤습니다!\n");
-    }
+    printf("%s의 상태:\n", character->name);
+    printf("체력: %d/%d | 힘: %d | 민첩: %d | 운: %d\n", 
+           character->health, character->max_Health, character->strength, character->agility, character->luck);
 }
