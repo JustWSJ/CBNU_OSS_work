@@ -21,22 +21,22 @@
 
 void callEvent(char flag){
     switch(flag){
-        case 'D':
+        case "D":
         //  call dungeon
-        case 'M':
+        case "M":
         //  call shop
-        case 'B':
+        case "B":
         //  call battle
         srand(time(NULL));
         battle(getPlayer(), getMonster(rand()%5));
         return;
-        case 'S':
+        case "S":
         //  call search
-        case 'K':
+        case "K":
         //  call boss battle
-        case 'F':
+        case "F":
         //  call randum event
-        case 'I':
+        case "I":
         //  call designated event
         default:
         return;
