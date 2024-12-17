@@ -469,7 +469,7 @@ int isValidPath(char **map, int size, int startX, int startY, int exitX, int exi
 
     int stackX[size * size], stackY[size * size];
     int top = -1;
-    stackX[++top] = startX;
+    stackX[++top] = startX + 1;
     stackY[top] = startY;
 
     while (top >= 0) {
@@ -484,7 +484,7 @@ int isValidPath(char **map, int size, int startX, int startY, int exitX, int exi
         for (int i = 0; i < 4; i++) {
             int nx = x + dx[i];
             int ny = y + dy[i];
-            if (nx >= 0 && nx < size && ny >= 0 && ny < size &&
+            if (nx > 0 && nx < size && ny > 0 && ny < size &&
                 !visited[nx][ny] && map[nx][ny] != 'W' && map[nx][ny] != 'w') {
                 stackX[++top] = nx;
                 stackY[top] = ny;
