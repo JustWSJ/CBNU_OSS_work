@@ -24,6 +24,7 @@ extern Inventory playerInventory; // 전역 인벤토리 선언
 // 함수 선언
 void initializeInventory();                  // 인벤토리 초기화
 void addItemToInventory(Item newItem);       // 아이템 추가
+int navigateMenu(const char* menuItems[], int itemCount);
 void showInventory();                        // 인벤토리 메인 메뉴 표시
 
 // 관리 함수 선언
