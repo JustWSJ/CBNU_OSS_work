@@ -5,7 +5,6 @@
 #include "Character.h"
 #include "monster.h"
 #include "battle.h"
-#include "shop.h"
 #include "items.h"
 
 

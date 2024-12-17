@@ -75,7 +75,7 @@ int loadStatus(Character* player) {
     fclose(file); // 파일 닫기
 }
 
-
+/*
 // 인벤토리 저장
 void saveInventory(const char* filename) {
     FILE* file = fopen(filename, "w");
@@ -134,4 +134,4 @@ void loadInventory(const char* filename) {
 
     fclose(file);
     printf("인벤토리가 불러와졌습니다: %s\n", filename);
-}
+}*/
