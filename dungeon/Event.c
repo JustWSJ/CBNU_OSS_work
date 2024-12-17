@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "character.h"
+#include "Character.h"
 #include "monster.h"
 #include "battle.h"
 #include "shop.h"
@@ -20,23 +20,24 @@
 // *X (eXit): 출구
 
 void callEvent(char flag){
+    Character * player = getPlayer();
     switch(flag){
-        case "D":
+        case 'D':
         //  call dungeon
-        case "M":
+        case 'M':
         //  call shop
-        case "B":
+        case 'B':
         //  call battle
         srand(time(NULL));
-        battle(getPlayer(), getMonster(rand()%5));
+        battle(player, getMonster(rand()%5));
         return;
-        case "S":
+        case 'S':
         //  call search
-        case "K":
+        case 'K':
         //  call boss battle
-        case "F":
+        case 'F':
         //  call randum event
-        case "I":
+        case 'I':
         //  call designated event
         default:
         return;
