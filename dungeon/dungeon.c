@@ -88,14 +88,19 @@ void Dungeon() {
                 printf("Dungeon Clear!\n");
                 wait();
                 exit(0);
-            } else if (isClear(floor)) option = DungeonEntrance(floor);
+            } else if (isClear(floor)) {
+                option = DungeonEntrance(floor);
+                player->Maxfloor = floor / 10;
+                saveStatus(player);
+            }
             else {
                 DungeonAdventure(floor);
             }
         } else {
             clearScreen();
-            printf("마을로 돌아갑니다.\n");
+            printf("마을로 돌아갑니다. ▼\n");
             wait();
+            clearScreen();
             return;
         }
     }
@@ -157,33 +162,35 @@ int SelectFloor(int MENU_COUNT) {
     int selected = 0;
     int updated = 1;
 
-    printf("던전 입구 선택");
+    printf("던전 입구 선택\n");
+
     while (1) {
         if (updated) {
-            for (int i = 0; i <= MENU_COUNT; i++) {
+            for (int i = 0; i <= MENU_COUNT; i++) { // 메뉴 개수: 0 ~ MENU_COUNT
                 gotoxy(INDENT, GAP + i);
                 if (i == selected) {
-                    SetColor(0x0E);
+                    SetColor(0x0E); // 선택된 항목 강조
                     printf("> %d", floors[i]);
                     SetColor(0x0F);
                 } else {
                     printf("  %d", floors[i]);
                 }
             }
-            updated = 0;
+            updated = 0; // 화면 업데이트 완료
         }
 
         if (isKeyPressed(KEY_UP)) {
-            selected = (selected - 1 + MENU_COUNT) % MENU_COUNT;
+            selected = (selected - 1 + (MENU_COUNT + 1)) % (MENU_COUNT + 1); // 위로 이동 (순환)
             updated = 1;
             Sleep(150);
         } else if (isKeyPressed(KEY_DOWN)) {
-            selected = (selected + 1) % MENU_COUNT;
+            selected = (selected + 1) % (MENU_COUNT + 1); // 아래로 이동 (순환)
             updated = 1;
             Sleep(150);
         } else if (isKeyPressed(KEY_ENTER) || isKeyPressed(KEY_SPACE)) {
             Sleep(150);
-            return floors[selected];
+            clearScreen();
+            return floors[selected]; // 선택된 층 반환
         }
     }
 }
@@ -192,16 +199,17 @@ int SelectFloor(int MENU_COUNT) {
 int DungeonEntrance(int Floor) {
     clearScreen();
     printf(" 던전 %d층\n", Floor);
+
     const char* options[] = {"다음 층으로 가기", "마을로 돌아가기"};
     int choice = 0;
     int updated = 1;
-    int menu_count = sizeof(options) / sizeof(options[0]);
+    int MENU_COUNT = 2; // 메뉴 개수는 2개
 
     while (1) {
         if (updated) {
             clearScreen();
             printf(" 던전 %d층\n", Floor);
-            for (int i = 0; i < menu_count; i++) {
+            for (int i = 0; i < MENU_COUNT; i++) { // 메뉴 개수만큼 반복
                 gotoxy(INDENT, GAP + i);
                 if (i == choice) {
                     SetColor(0x0E);
@@ -215,17 +223,17 @@ int DungeonEntrance(int Floor) {
         }
 
         if (isKeyPressed(KEY_UP)) {
-            choice = (choice - 1 + menu_count) % menu_count;
+            choice = (choice - 1 + MENU_COUNT) % MENU_COUNT; // 위로 이동
             updated = 1;
             Sleep(150);
         } else if (isKeyPressed(KEY_DOWN)) {
-            choice = (choice + 1) % menu_count;
+            choice = (choice + 1) % MENU_COUNT; // 아래로 이동
             updated = 1;
             Sleep(150);
         } else if (isKeyPressed(KEY_ENTER) || isKeyPressed(KEY_SPACE)) {
             Sleep(150);
             clearScreen();
-            return choice;
+            return choice; // 선택한 옵션 반환
         }
     }
 }
@@ -305,10 +313,17 @@ char** allocationfactor(int floor, int size, char** map) {
 
         // 경로 유효성 검사
         validPath = isValidPath(map_fac, size, startX, startY, exitX, exitY);
+
+        if (!validPath) {
+            // 경로가 유효하지 않으면 메모리 해제
+            for (int i = 0; i < size; i++) free(map_fac[i]);
+            free(map_fac);
+        }
     }
 
     return map_fac;
 }
+
 // 요소를 랜덤하게 배치
 void place_element(char element, int count, int size, char **map_fac) {
     while (count > 0) {
